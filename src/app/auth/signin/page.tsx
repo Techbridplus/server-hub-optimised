@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { Github, Mail } from "lucide-react"
-import { LinkAccountModal } from "@/components/link-account-modal"
+// import { LinkAccountModal } from "@/components/link-account-modal"
 
 export default function SignInPage() {
   const router = useRouter()
@@ -19,9 +19,9 @@ export default function SignInPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [showLinkModal, setShowLinkModal] = useState(false)
-  const [linkEmail, setLinkEmail] = useState("")
-  const [linkProvider, setLinkProvider] = useState("")
+  // const [showLinkModal, setShowLinkModal] = useState(false)
+  // const [linkEmail, setLinkEmail] = useState("")
+  // const [linkProvider, setLinkProvider] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -129,7 +129,7 @@ export default function SignInPage() {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/auth/signup" className="text-primary hover:underline">
               Sign up
             </Link>
@@ -137,12 +137,12 @@ export default function SignInPage() {
         </CardFooter>
       </Card>
 
-      <LinkAccountModal
+      {/* <LinkAccountModal
         isOpen={showLinkModal}
         onClose={() => setShowLinkModal(false)}
         email={linkEmail}
         provider={linkProvider}
-      />
+      /> */}
     </div>
   )
 }

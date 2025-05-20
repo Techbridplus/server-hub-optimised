@@ -21,7 +21,7 @@ type VerifyCodeFormData = z.infer<typeof verifyCodeSchema>
 
 export default function Setup2FAPage() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [qrCode, setQrCode] = useState<string | null>(null)
   const [secret, setSecret] = useState<string | null>(null)
   const [backupCodes, setBackupCodes] = useState<string[]>([])
@@ -65,7 +65,7 @@ export default function Setup2FAPage() {
       setSecret(data.secret)
       setBackupCodes(data.backupCodes)
     } catch (error) {
-      setError("Failed to set up two-factor authentication")
+      setError(`Failed to set up two-factor authentication: ${error}`)
     }
   }
 
@@ -154,7 +154,7 @@ export default function Setup2FAPage() {
                   2. Open the app and tap the + button to add a new account
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  3. Choose "Scan QR code" and scan the code below, or tap "Enter setup key" and enter the secret key manually
+                  3. Choose &quot;Scan QR code&quot; and scan the code below, or tap &quot;Enter setup key&quot; and enter the secret key manually
                 </p>
                 <p className="text-sm text-muted-foreground">
                   4. Once added, enter the 6-digit code shown in your authenticator app
@@ -164,7 +164,7 @@ export default function Setup2FAPage() {
               <div className="flex flex-col items-center space-y-4 py-4">
                 {qrCode && (
                   <>
-                    <div 
+                    <div
                       className="w-48 h-48 bg-white p-2 rounded-lg"
                       dangerouslySetInnerHTML={{ __html: qrCode }}
                     />
@@ -177,7 +177,7 @@ export default function Setup2FAPage() {
                 <div className="space-y-2">
                   <Label>Secret Key (for manual entry)</Label>
                   <div className="rounded-md bg-muted p-2 text-center font-mono text-sm">{secret}</div>
-                  <p className="text-sm text-muted-foreground">Enter this code manually if you can't scan the QR code</p>
+                  <p className="text-sm text-muted-foreground">Enter this code manually if you can&apos;t scan the QR code</p>
                 </div>
               )}
 

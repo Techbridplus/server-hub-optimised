@@ -326,7 +326,7 @@ export default function SignUpPage() {
           ) : (
             <div className="space-y-4">
               <div className="text-center text-sm text-muted-foreground">
-                We've sent a verification code to {verificationEmail}
+                We&apos;ve sent a verification code to {verificationEmail}
               </div>
               <div className="space-y-2">
                 <Label>Verification Code</Label>
