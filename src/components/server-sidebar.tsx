@@ -2,17 +2,18 @@
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import Image  from "next/image"
+import Image from "next/image"
 import { CreateServerModal } from "@/components/create-server-modal"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { Compass, Star, History, Settings, Sparkles, Bookmark,  LogOut, } from "lucide-react"
+import { Compass, Star, History, Settings, Sparkles, Bookmark, LogOut, } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { signOut, useSession } from "next-auth/react"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
-import { Group } from "@prisma/client"
+import { Group } from "../../generated/prisma";
+// import { Group } from "@prisma/client"
 
 function ServerSidebar() {
     const { data: session } = useSession()
@@ -24,7 +25,7 @@ function ServerSidebar() {
         const fetchServers = async () => {
             try {
                 const groupsRes = await fetch('/api/groups/joined')
-                if ( !groupsRes.ok) {
+                if (!groupsRes.ok) {
                     throw new Error('Failed to fetch data')
                 }
 
