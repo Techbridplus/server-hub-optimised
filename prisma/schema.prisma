@@ -1,0 +1,351 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  bio           String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts           Account[]
+  sessions           Session[]
+  servers            Server[]
+  serverMembers      ServerMember[]
+  groupMembers       GroupMember[]
+  savedServers       SavedServer[]
+  twoFactorAuth      TwoFactorAuth?
+  scheduledDeletions ScheduledDeletion[]
+  sentMessages       DirectMessage[]     @relation("SentMessages")
+  receivedMessages   DirectMessage[]     @relation("ReceivedMessages")
+  messages           Message[]
+  announcements      Announcement[]      @relation("AnnouncementAuthor")
+  likes              Like[]              @relation("UserLikes")
+  comments           Comment[]           @relation("UserComments")
+  eventComments      EventComment[]      @relation("EventCommentAuthor")
+  commentLikes       CommentLike[]       @relation("CommentLikeUser")
+
+  userStatus   UserStatus?
+  Notification Notification[]
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId // or reference User model if you have one
+  heading   String?
+  message   String
+  type      String // e.g., 'info', 'success', etc.
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model TwoFactorAuth {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @unique @db.ObjectId
+  secret      String
+  enabled     Boolean  @default(false)
+  backupCodes String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Server {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  imageUrl    String?
+  bannerUrl   String?
+  category    String
+  isPrivate   Boolean  @default(false)
+  isExclusive Boolean  @default(false)
+  accessKey   String?
+  ownerId     String   @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner              User                @relation(fields: [ownerId], references: [id])
+  members            ServerMember[]
+  events             Event[]
+  groups             Group[]
+  announcements      Announcement[]
+  tags               ServerTag[]
+  savedBy            SavedServer[]
+  scheduledDeletions ScheduledDeletion[]
+}
+
+enum MemberRole {
+  ADMIN
+  MODERATOR
+  MEMBER
+  VISITOR
+}
+
+model ServerMember {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String     @db.ObjectId
+  serverId String     @db.ObjectId
+  role     MemberRole @default(VISITOR) // admin, moderator, member
+  joinedAt DateTime   @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+}
+
+model ServerTag {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  serverId String @db.ObjectId
+
+  server Server @relation(fields: [serverId], references: [id])
+}
+
+model SavedServer {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String   @db.ObjectId
+  serverId String   @db.ObjectId
+  savedAt  DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  server Server @relation(fields: [serverId], references: [id])
+}
+
+model Event {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  location    String?
+  imageUrl    String?
+  serverId    String    @db.ObjectId
+  isExclusive Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      String    @db.ObjectId
+
+  server   Server         @relation(fields: [serverId], references: [id])
+  photos   EventPhoto[]
+  videos   EventVideo[]
+  comments EventComment[]
+}
+
+model EventPhoto {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  url        String
+  caption    String?
+  uploadedBy String
+  eventId    String   @db.ObjectId
+  uploadedAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model EventVideo {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  url        String
+  caption    String?
+  uploadedBy String
+  eventId    String   @db.ObjectId
+  thumbnail  String?
+  uploadedAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model EventComment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  userId    String   @db.ObjectId
+  eventId   String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event Event         @relation(fields: [eventId], references: [id])
+  user  User          @relation("EventCommentAuthor", fields: [userId], references: [id])
+  likes CommentLike[]
+}
+
+model CommentLike {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  commentId String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  user    User         @relation("CommentLikeUser", fields: [userId], references: [id])
+  comment EventComment @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, commentId])
+}
+
+model Group {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  imageUrl    String?
+  isPrivate   Boolean  @default(false)
+  serverId    String   @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  server   Server        @relation(fields: [serverId], references: [id])
+  members  GroupMember[]
+  channels Channel[]
+}
+
+model GroupMember {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String     @db.ObjectId
+  groupId  String     @db.ObjectId
+  role     MemberRole @default(MEMBER) // admin, moderator, member
+  joinedAt DateTime   @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model Channel {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  type        String   @default("text") // text, voice, video
+  groupId     String   @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  group    Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  messages Message[]
+}
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  userId    String   @db.ObjectId
+  channelId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+}
+
+model DirectMessage {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  content    String
+  senderId   String   @db.ObjectId
+  receiverId String   @db.ObjectId
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+model Announcement {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  isImportant Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  serverId    String    @db.ObjectId
+  server      Server    @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  authorId    String    @db.ObjectId
+  author      User      @relation("AnnouncementAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  likes       Like[]
+  comments    Comment[]
+}
+
+model Like {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime     @default(now())
+  userId         String       @db.ObjectId
+  user           User         @relation("UserLikes", fields: [userId], references: [id], onDelete: Cascade)
+  announcementId String       @db.ObjectId
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, announcementId])
+}
+
+model Comment {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  content        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  userId         String       @db.ObjectId
+  user           User         @relation("UserComments", fields: [userId], references: [id], onDelete: Cascade)
+  announcementId String       @db.ObjectId
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+}
+
+model ScheduledDeletion {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  serverId     String   @db.ObjectId
+  userId       String   @db.ObjectId
+  scheduledFor DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([serverId])
+  @@index([userId])
+}
+
+model UserStatus {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String   @unique
+  status   String   @default("offline") // online, offline, idle, dnd
+  lastSeen DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
