@@ -41,7 +41,7 @@ export default function SignInPage() {
         router.push("/")
       }
     } catch (error) {
-      setError("An unexpected error occurred")
+      setError(`An unexpected error occurred: ${error}`)
     } finally {
       setIsLoading(false)
     }
@@ -54,7 +54,7 @@ export default function SignInPage() {
         callbackUrl: "/",
       })
     } catch (error) {
-      setError("An unexpected error occurred")
+      setError(`An unexpected error occurred: ${error}`)
     } finally {
       setIsLoading(false)
     }
@@ -75,7 +75,7 @@ export default function SignInPage() {
           )}
 
           <form 
-          // onSubmit={handleSubmit}
+          onSubmit={handleSubmit}
            className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

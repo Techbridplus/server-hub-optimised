@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
+import Image  from "next/image"
 import { CreateServerModal } from "@/components/create-server-modal"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
@@ -116,7 +117,7 @@ function ServerSidebar() {
                                     <Button key={group.id} variant="ghost" className="w-full  h-20 justify-start" asChild>
                                         <Link href={`/group/${group.id}`}>
                                             <div className="relative mr-2 h-15 w-15 overflow-hidden rounded-full">
-                                                <img
+                                                <Image
                                                     src={group.imageUrl || "/placeholder.svg"}
                                                     alt={group.name}
                                                     className="h-full w-full object-cover"
