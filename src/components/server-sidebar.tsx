@@ -12,8 +12,8 @@ import { signOut, useSession } from "next-auth/react"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
-import { Group } from "../../generated/prisma";
-// import { Group } from "@prisma/client"
+// import { Group } from "../../generated/prisma";
+import { Group } from "@prisma/client"
 
 function ServerSidebar() {
     const { data: session } = useSession()
