@@ -51,7 +51,7 @@ export default function SignInPage() {
     setIsLoading(true)
     try {
       await signIn(provider, {
-        callbackUrl: "/",
+        callbackUrl: "https://server-hub-optimised-elqnprnzo-techbridplus-projects.vercel.app/",
       })
     } catch (error) {
       setError(`An unexpected error occurred: ${error}`)

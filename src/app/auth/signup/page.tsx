@@ -166,7 +166,7 @@ export default function SignUpPage() {
 
   const handleOAuthSignIn = (provider: "google" | "github") => {
     setIsLoading(true)
-    signIn(provider, { callbackUrl: "/" })
+    signIn(provider, { callbackUrl: "https://server-hub-optimised-elqnprnzo-techbridplus-projects.vercel.app" })
   }
 
   return (
