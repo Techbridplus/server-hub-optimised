@@ -3,13 +3,16 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
+// import { prisma } from "@/lib/prisma"
+import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
 import { authenticator } from "otplib"
-import {  NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { Session } from "next-auth"
 
+
+const prisma = new PrismaClient()
 declare module "next-auth" {
   interface Session {
     user: {
@@ -20,8 +23,6 @@ declare module "next-auth" {
     }
   }
 }
-
-
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -194,7 +195,7 @@ async function verify2FACode(userId: string, code: string): Promise<boolean> {
 
 type HandlerFunction = (session: Session) => Promise<NextResponse>;
 
-export async function authMiddlewareAppRouter( handler: HandlerFunction) {
+export async function authMiddlewareAppRouter(handler: HandlerFunction) {
   try {
     const session = await getServerSession(authOptions)
 

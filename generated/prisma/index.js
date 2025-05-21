@@ -377,7 +377,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "B:\\programming\\development\\server-hub-optimised\\generated\\prisma",
+      "value": "C:\\Users\\gaura\\OneDrive\\Desktop\\server-hub-optimised\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -391,7 +391,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "B:\\programming\\development\\server-hub-optimised\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\gaura\\OneDrive\\Desktop\\server-hub-optimised\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -405,6 +405,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mongodb",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
