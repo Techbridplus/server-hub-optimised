@@ -1,12 +1,12 @@
 import {  NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
-import { PrismaClient } from "@prisma/client"
+import prisma from "@/lib/prisma"
 import { authOptions } from "@/lib/auth"
 import crypto from "crypto"
 import qrcode from "qrcode"
 import { authenticator } from "otplib"
 
-const prisma = new PrismaClient()
+
 
 // Generate a random string for 2FA secret
 function generateSecret() {

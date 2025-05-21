@@ -21,11 +21,11 @@ exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 6.8.2
- * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
+ * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
  */
 Prisma.prismaVersion = {
   client: "6.8.2",
-  engine: "173f8d54f8d52e692c7e27e72a88314ec7aeff60"
+  engine: "2060c79ba17c6bb9f5823312b6f6b7f4a845738e"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -120,6 +120,56 @@ exports.Prisma.UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   password: 'password',
   image: 'image',
+  bio: 'bio',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  provider: 'provider',
+  providerAccountId: 'providerAccountId',
+  refresh_token: 'refresh_token',
+  access_token: 'access_token',
+  expires_at: 'expires_at',
+  token_type: 'token_type',
+  scope: 'scope',
+  id_token: 'id_token',
+  session_state: 'session_state'
+};
+
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  sessionToken: 'sessionToken',
+  userId: 'userId',
+  expires: 'expires'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  heading: 'heading',
+  message: 'message',
+  type: 'type',
+  read: 'read',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.VerificationTokenScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  token: 'token',
+  expires: 'expires'
+};
+
+exports.Prisma.TwoFactorAuthScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  secret: 'secret',
+  enabled: 'enabled',
+  backupCodes: 'backupCodes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -132,6 +182,7 @@ exports.Prisma.ServerScalarFieldEnum = {
   bannerUrl: 'bannerUrl',
   category: 'category',
   isPrivate: 'isPrivate',
+  isExclusive: 'isExclusive',
   accessKey: 'accessKey',
   ownerId: 'ownerId',
   createdAt: 'createdAt',
@@ -144,6 +195,69 @@ exports.Prisma.ServerMemberScalarFieldEnum = {
   serverId: 'serverId',
   role: 'role',
   joinedAt: 'joinedAt'
+};
+
+exports.Prisma.ServerTagScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  serverId: 'serverId'
+};
+
+exports.Prisma.SavedServerScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  serverId: 'serverId',
+  savedAt: 'savedAt'
+};
+
+exports.Prisma.EventScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  location: 'location',
+  imageUrl: 'imageUrl',
+  serverId: 'serverId',
+  isExclusive: 'isExclusive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+};
+
+exports.Prisma.EventPhotoScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  caption: 'caption',
+  uploadedBy: 'uploadedBy',
+  eventId: 'eventId',
+  uploadedAt: 'uploadedAt'
+};
+
+exports.Prisma.EventVideoScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  caption: 'caption',
+  uploadedBy: 'uploadedBy',
+  eventId: 'eventId',
+  thumbnail: 'thumbnail',
+  uploadedAt: 'uploadedAt'
+};
+
+exports.Prisma.EventCommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  userId: 'userId',
+  eventId: 'eventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CommentLikeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  commentId: 'commentId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.GroupScalarFieldEnum = {
@@ -193,6 +307,49 @@ exports.Prisma.DirectMessageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AnnouncementScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  isImportant: 'isImportant',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  serverId: 'serverId',
+  authorId: 'authorId'
+};
+
+exports.Prisma.LikeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  announcementId: 'announcementId'
+};
+
+exports.Prisma.CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  announcementId: 'announcementId'
+};
+
+exports.Prisma.ScheduledDeletionScalarFieldEnum = {
+  id: 'id',
+  serverId: 'serverId',
+  userId: 'userId',
+  scheduledFor: 'scheduledFor',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserStatusScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  lastSeen: 'lastSeen'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -211,13 +368,30 @@ exports.MemberRole = exports.$Enums.MemberRole = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Account: 'Account',
+  Session: 'Session',
+  Notification: 'Notification',
+  VerificationToken: 'VerificationToken',
+  TwoFactorAuth: 'TwoFactorAuth',
   Server: 'Server',
   ServerMember: 'ServerMember',
+  ServerTag: 'ServerTag',
+  SavedServer: 'SavedServer',
+  Event: 'Event',
+  EventPhoto: 'EventPhoto',
+  EventVideo: 'EventVideo',
+  EventComment: 'EventComment',
+  CommentLike: 'CommentLike',
   Group: 'Group',
   GroupMember: 'GroupMember',
   Channel: 'Channel',
   Message: 'Message',
-  DirectMessage: 'DirectMessage'
+  DirectMessage: 'DirectMessage',
+  Announcement: 'Announcement',
+  Like: 'Like',
+  Comment: 'Comment',
+  ScheduledDeletion: 'ScheduledDeletion',
+  UserStatus: 'UserStatus'
 };
 
 /**

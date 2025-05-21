@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { authenticator } from "otplib"
 import {  NextResponse } from "next/server"
@@ -21,7 +21,6 @@ declare module "next-auth" {
   }
 }
 
-const prisma = new PrismaClient()
 
 
 export const authOptions: NextAuthOptions = {
