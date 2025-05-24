@@ -1,11 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
-import { PrismaClient } from "@prisma/client"
 import { authOptions } from "@/lib/auth"
 import { z } from "zod"
 import { authenticator } from "otplib"
-
-const prisma = new PrismaClient()
+import { prisma } from "@/lib/prisma"
 
 const verifySchema = z.object({
   code: z.string().min(6),
