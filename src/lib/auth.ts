@@ -2,10 +2,9 @@ import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import type { Adapter } from "next-auth/adapters"
-import { prisma } from "@/lib/prisma"
-// import { PrismaClient } from "@prisma/client"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+// import { prisma } from "@/lib/prisma"
+import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
 import { authenticator } from "otplib"
 import { NextResponse } from "next/server"
@@ -13,7 +12,7 @@ import { getServerSession } from "next-auth"
 import { Session } from "next-auth"
 
 
-// const prisma = new PrismaClient()
+const prisma = new PrismaClient()
 declare module "next-auth" {
   interface Session {
     user: {
@@ -26,7 +25,7 @@ declare module "next-auth" {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as Adapter,
+  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -240,4 +239,3 @@ export async function isGroupAdmin(userId: string, groupId: string): Promise<boo
   });
   return !!member;
 }
-
