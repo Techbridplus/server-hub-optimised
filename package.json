@@ -27,6 +27,7 @@
     "@radix-ui/react-switch": "^1.2.4",
     "@radix-ui/react-tabs": "^1.1.11",
     "@radix-ui/react-toast": "^1.2.13",
+    "@swc/core": "^1.11.29",
     "@vercel/blob": "^1.0.2",
     "axios": "^1.9.0",
     "bcryptjs": "^3.0.2",
