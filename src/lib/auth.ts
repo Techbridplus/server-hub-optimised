@@ -3,8 +3,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
-// import { PrismaClient } from "@prisma/client"
+// import { prisma } from "@/lib/prisma"
+import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
 import { authenticator } from "otplib"
 import { NextResponse } from "next/server"
@@ -12,7 +12,7 @@ import { getServerSession } from "next-auth"
 import { Session } from "next-auth"
 
 
-// const prisma = new PrismaClient()
+const prisma = new PrismaClient()
 declare module "next-auth" {
   interface Session {
     user: {
