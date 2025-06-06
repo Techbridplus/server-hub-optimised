@@ -12,7 +12,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ serv
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const userId = session.user.id
     const { serverId } = await params
     const { searchParams } = new URL(req.url)
     const page = Number.parseInt(searchParams.get("page") || "1")
@@ -27,7 +26,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ serv
       include: {
         members: {
           where: {
-            userId: userId,
+            userId: session.user.id,
           },
         },
         _count: {
@@ -71,12 +70,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ ser
     try {
       // Ensure params is properly awaited
       const { serverId } = await params
-      const userId = session.user.id
 
       // Check if user has permission to create groups
       const serverMember = await prisma.serverMember.findFirst({
         where: {
-          userId,
+          userId: session.user.id,
           serverId,
         },
         select: {
@@ -106,7 +104,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ ser
         // Add creator as admin
         await tx.groupMember.create({
           data: {
-            userId,
+            userId: session.user.id,
             groupId: newGroup.id,
             role: serverMember.role,
           },

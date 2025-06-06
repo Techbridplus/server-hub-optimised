@@ -121,6 +121,8 @@ function ServerSidebar() {
                                                 <Image
                                                     src={group.imageUrl || "/placeholder.svg"}
                                                     alt={group.name}
+                                                    width={60}
+                                                    height={60}
                                                     className="h-full w-full object-cover"
                                                 />
                                             </div>

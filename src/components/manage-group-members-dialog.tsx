@@ -21,11 +21,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { getSocket } from "@/lib/socket-client"
 import { MoreVertical, UserPlus, Shield, User as UserIcon, X } from "lucide-react"
-import { User,MemberRole } from "../../generated/prisma"
+import { GroupMember,MemberRole } from "../../generated/prisma"
 
-interface GroupMemberWithUser {
-  user: User
-  role: MemberRole
+interface GroupMemberWithUser extends GroupMember {
+  user: {
+    id: string
+    name: string
+    image: string
+  }
 }
 
 interface ManageGroupMembersDialogProps {

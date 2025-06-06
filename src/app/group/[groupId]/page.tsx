@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { MemberRole,Channel,GroupMember,User } from "../../../../generated/prisma"
+import { MemberRole,Channel,GroupMember } from "../../../../generated/prisma"
 import { 
   Users, 
   Hash, 
@@ -38,10 +38,12 @@ import Image from "next/image"
 //   type: string
 // }
 
-interface GroupMemberWithUser {
-  groupMember: GroupMember
-  user: User
-  role: MemberRole
+interface GroupMemberWithUser extends GroupMember {
+  user: {
+    id: string
+    name: string
+    image: string
+  }
 }
 
 interface ExtendedGroup {
@@ -51,6 +53,7 @@ interface ExtendedGroup {
   imageUrl: string | null
   server: {
     id: string
+    name: string
   }
   serverId: string
   channels: Channel[]
@@ -97,7 +100,6 @@ export default function GroupPage() {
         if (!response.ok) throw new Error("Failed to fetch group data")
         
         const data = await response.json()
-        console.log("Group data:", data)
         
         setGroup(data)
         
@@ -217,22 +219,22 @@ export default function GroupPage() {
   
   // Group channels by type
   const textChannels = group.channels?.filter((channel: Channel) => channel.type === "text") || []
+
   
   // Check if user is admin or moderator
   const isAdmin = group?.members?.some((member: GroupMemberWithUser) => 
-    member.groupMember.userId === session?.user?.id && 
-    (member.groupMember.role === MemberRole.ADMIN || member.groupMember.role === MemberRole.MODERATOR)
+    member.userId === session?.user?.id && 
+    (member.role === MemberRole.ADMIN || member.role === MemberRole.MODERATOR)
   ) || false
-  console.log("Is admin:", isAdmin)
 
   const renderMemberList = (members: GroupMemberWithUser[] | undefined, role: MemberRole, showBadge = false) => {
     if (!members) return null;
     
     return members
-      .filter((member: GroupMemberWithUser) => member.groupMember.role === role && member.groupMember.userId !== group.creatorId)
+      .filter((member: GroupMemberWithUser) => member.role === role && member.userId !== group.creatorId)
       .map((member: GroupMemberWithUser) => (
         <button
-          key={member.groupMember.id}
+          key={member.id}
           className="flex w-full items-center gap-x-2 rounded-md px-2 py-1 text-left text-sm transition-colors hover:bg-accent"
           onClick={() => handleDirectMessage(member)}
         >
@@ -244,7 +246,7 @@ export default function GroupPage() {
             <span>{member.user.name}</span>
             {showBadge && (
               <Badge variant="outline" className="text-xs">
-                {member.groupMember.role === MemberRole.ADMIN ? "Admin" : "Mod"}
+                {member.role === MemberRole.ADMIN ? "Admin" : "Mod"}
               </Badge>
             )}
           </div>
@@ -505,7 +507,7 @@ export default function GroupPage() {
                 <div>
                   <p className="font-medium">{selectedUser?.user.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {selectedUser?.groupMember.role === MemberRole.ADMIN ? "Admin" : selectedUser?.groupMember.role === MemberRole.MODERATOR ? "Moderator" : "Member"}
+                    {selectedUser?.role === MemberRole.ADMIN ? "Admin" : selectedUser?.role === MemberRole.MODERATOR ? "Moderator" : "Member"}
                   </p>
                 </div>
               </div>
