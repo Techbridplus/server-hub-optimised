@@ -31,7 +31,6 @@ import { AddChannelDialog } from "@/components/add-channel-dialog"
 import { ManageGroupMembersDialog } from "@/components/manage-group-members-dialog"
 import Link from "next/link"
 import Image from "next/image"
-import { Socket } from "socket.io-client"
 
 // interface Channel {
 //   id: string
