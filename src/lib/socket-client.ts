@@ -8,7 +8,8 @@ export const initSocket = (userId?: string, serverId?: string) => {
       query: {
         userId,
         serverId
-      }
+      },
+      withCredentials:true
     })
 
     socket.on("connect", () => {
