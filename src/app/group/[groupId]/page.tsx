@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams, useSearchParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-import { initSocket } from "@/lib/socket-client"
+
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -31,6 +31,7 @@ import { AddChannelDialog } from "@/components/add-channel-dialog"
 import { ManageGroupMembersDialog } from "@/components/manage-group-members-dialog"
 import Link from "next/link"
 import Image from "next/image"
+import { Socket } from "socket.io-client"
 
 // interface Channel {
 //   id: string
@@ -80,7 +81,6 @@ export default function GroupPage() {
   const channelId = searchParams.get("channel")
   const router = useRouter()
   const { data: session } = useSession()
-  const socket = initSocket()
   const { toast } = useToast()
   
   const [group, setGroup] = useState<ExtendedGroup | null>(null)
@@ -91,6 +91,7 @@ export default function GroupPage() {
   const [selectedUser, setSelectedUser] = useState<GroupMemberWithUser | null>(null)
   const [directMessages, setDirectMessages] = useState<DirectMessage[]>([])
   const [newMessage, setNewMessage] = useState("")
+
   
   // Fetch group data
   useEffect(() => {
@@ -118,6 +119,7 @@ export default function GroupPage() {
           variant: "destructive",
         })
       } finally {
+
         setIsLoading(false)
       }
     }
@@ -150,39 +152,6 @@ export default function GroupPage() {
     }
   }
   
-  // Send direct message
-  const sendDirectMessage = () => {
-    if (!newMessage.trim() || !selectedUser) return
-    
-    const message: DirectMessage = {
-      id: Date.now().toString(),
-      content: newMessage,
-      senderId: session?.user?.id || "",
-      receiverId: selectedUser.user.id,
-      createdAt: new Date().toISOString()
-    }
-    
-    socket?.emit("directMessage", message)
-    setDirectMessages([...directMessages, message])
-    setNewMessage("")
-  }
-  
-  // Listen for incoming direct messages
-  useEffect(() => {
-    if (!socket) return
-    
-    socket.on("directMessage", (message: DirectMessage) => {
-      if (isDirectMessageOpen && 
-          ((message.senderId === selectedUser?.user.id && message.receiverId === session?.user?.id) || 
-           (message.senderId === session?.user?.id && message.receiverId === selectedUser?.user.id))) {
-        setDirectMessages(prev => [...prev, message])
-      }
-    })
-    
-    return () => {
-      socket.off("directMessage")
-    }
-  }, [socket, isDirectMessageOpen, selectedUser, session?.user?.id])
   
   // Toggle notifications
   const toggleNotifications = () => {
@@ -443,6 +412,7 @@ export default function GroupPage() {
               userId={session?.user?.id || ""} 
               isAdmin={isAdmin} 
               channelId={channelId} 
+              serverId={group.serverId}
             />
 
           ) : (
@@ -546,11 +516,11 @@ export default function GroupPage() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault()
-                      sendDirectMessage()
+
                     }
                   }}
                 />
-                <Button size="icon" onClick={sendDirectMessage}>
+                <Button size="icon">
                   <Send className="h-4 w-4" />
                 </Button>
               </div>

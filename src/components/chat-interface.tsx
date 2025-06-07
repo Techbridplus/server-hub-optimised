@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { getSocket } from "@/lib/socket-client"
+import { initSocket } from "@/lib/socket-client"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -60,12 +60,13 @@ interface ChatInterfaceProps {
   userId: string
   isAdmin: boolean
   channelId?: string
+  serverId?: string
 }
 
-export function ChatInterface({ group, userId, isAdmin, channelId }: ChatInterfaceProps) {
+export function ChatInterface({ group, userId, isAdmin, channelId ,serverId}: ChatInterfaceProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const socket = getSocket()
+  const socket = initSocket(userId,serverId)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const { data: session } = useSession()
 
