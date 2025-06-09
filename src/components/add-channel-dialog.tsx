@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
-import { getSocket } from "@/lib/socket-client"
 
 interface AddChannelDialogProps {
   groupId: string
@@ -28,7 +27,6 @@ interface AddChannelDialogProps {
 export function AddChannelDialog({ groupId, serverId }: AddChannelDialogProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const socket = getSocket()
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -74,13 +72,6 @@ export function AddChannelDialog({ groupId, serverId }: AddChannelDialogProps) {
         description: `Channel #${channel.name} created successfully`,
       })
 
-      // Notify other users via socket
-      if (socket) {
-        socket.emit("channel-created", {
-          groupId,
-          channel,
-        })
-      }
 
       setIsOpen(false)
       setName("")

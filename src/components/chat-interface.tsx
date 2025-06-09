@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { initSocket } from "@/lib/socket-client"
+import { getSocket } from "@/lib/socket-client"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -66,7 +66,7 @@ interface ChatInterfaceProps {
 export function ChatInterface({ group, userId, isAdmin, channelId ,serverId}: ChatInterfaceProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const socket = initSocket(userId,serverId)
+  const socket = getSocket()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const { data: session } = useSession()
 
@@ -75,7 +75,7 @@ export function ChatInterface({ group, userId, isAdmin, channelId ,serverId}: Ch
   const [isLoading, setIsLoading] = useState(false)
   const [typingUsers, setTypingUsers] = useState<{ [key: string]: string }>({})
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-
+  console.log(serverId)
   // Get current user information
   const currentUser = {
     id: userId,

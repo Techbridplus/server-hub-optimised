@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
-import { getSocket } from "@/lib/socket-client"
+import { initSocket } from "@/lib/socket-client"
 import { MoreVertical, UserPlus, Shield, User as UserIcon, X } from "lucide-react"
 import { GroupMember,MemberRole } from "../../generated/prisma"
 
@@ -41,7 +41,7 @@ interface ManageGroupMembersDialogProps {
 export function ManageGroupMembersDialog({ groupId, serverId, members, isOwner }: ManageGroupMembersDialogProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const socket = getSocket()
+  const socket = initSocket()
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)

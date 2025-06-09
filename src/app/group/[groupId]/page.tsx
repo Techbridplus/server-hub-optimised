@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams, useSearchParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-
+import { initSocket } from "@/lib/socket-client"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -81,7 +81,7 @@ export default function GroupPage() {
   const router = useRouter()
   const { data: session } = useSession()
   const { toast } = useToast()
-  
+
   const [group, setGroup] = useState<ExtendedGroup | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true)
@@ -90,7 +90,7 @@ export default function GroupPage() {
   const [selectedUser, setSelectedUser] = useState<GroupMemberWithUser | null>(null)
   const [directMessages, setDirectMessages] = useState<DirectMessage[]>([])
   const [newMessage, setNewMessage] = useState("")
-
+  
   
   // Fetch group data
   useEffect(() => {
@@ -118,13 +118,14 @@ export default function GroupPage() {
           variant: "destructive",
         })
       } finally {
-
+        initSocket(session?.user?.id, group?.serverId)
         setIsLoading(false)
       }
     }
     
     fetchGroupData()
   }, [groupId, channelId, toast, router])
+
   
   // Handle direct message
   const handleDirectMessage = (member: GroupMemberWithUser) => {

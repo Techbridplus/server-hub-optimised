@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Users, Search, Shield, UserMinus, MoreHorizontal, MessageSquare, Video, Phone } from "lucide-react"
+import { Users, Search, Shield, UserMinus, MoreHorizontal, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -20,9 +20,8 @@ import { ServerMember, User } from "../../generated/prisma"
 import { useToast } from "@/components/ui/use-toast"
 import { useSession } from "next-auth/react"
 import { ChatDialog } from "@/components/chat-dialog"
-import { CallDialog } from "@/components/call-dialog"
 import { formatDistanceToNow } from "date-fns"
-import { initSocket, getSocket, disconnectSocket } from "@/lib/socket-client"
+import { initSocket, disconnectSocket } from "@/lib/socket-client"
 
 interface MembersDialogProps {
   serverId: string;
@@ -34,15 +33,13 @@ interface MemberWithUser extends ServerMember {
   lastSeen?: Date;
 }
 
-export function MembersDialog({ serverId }: MembersDialogProps) {
+export function MembersDialog({serverId }: MembersDialogProps) {
   const [open, setOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [members, setMembers] = useState<MemberWithUser[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedMember, setSelectedMember] = useState<MemberWithUser | null>(null)
   const [isChatOpen, setIsChatOpen] = useState(false)
-  const [isCallOpen, setIsCallOpen] = useState(false)
-  const [callType, setCallType] = useState<"audio" | "video" | null>(null)
   const { toast } = useToast()
   const { data: session } = useSession()
   
@@ -138,7 +135,7 @@ export function MembersDialog({ serverId }: MembersDialogProps) {
       })
       
       // Emit socket event
-      getSocket()?.emit("memberRoleUpdate", { 
+      initSocket()?.emit("memberRoleUpdate", { 
         serverId, 
         memberId, 
         role: "MODERATOR" 
@@ -180,7 +177,7 @@ export function MembersDialog({ serverId }: MembersDialogProps) {
       })
       
       // Emit socket event
-      getSocket()?.emit("memberRoleUpdate", { 
+      initSocket()?.emit("memberRoleUpdate", { 
         serverId, 
         memberId, 
         role: "MEMBER" 
@@ -212,7 +209,7 @@ export function MembersDialog({ serverId }: MembersDialogProps) {
       })
       
       // Emit socket event
-      getSocket()?.emit("memberKicked", { 
+      initSocket()?.emit("memberKicked", { 
         serverId, 
         memberId 
       })
@@ -231,11 +228,6 @@ export function MembersDialog({ serverId }: MembersDialogProps) {
     setIsChatOpen(true)
   }
   
-  const startCall = (member: MemberWithUser, type: "audio" | "video") => {
-    setSelectedMember(member)
-    setCallType(type)
-    setIsCallOpen(true)
-  }
 
   return (
     <>
@@ -327,14 +319,6 @@ export function MembersDialog({ serverId }: MembersDialogProps) {
                             <MessageSquare className="h-4 w-4 mr-2" />
                             Message
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => startCall(member, "audio")}>
-                            <Phone className="h-4 w-4 mr-2" />
-                            Voice Call
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => startCall(member, "video")}>
-                            <Video className="h-4 w-4 mr-2" />
-                            Video Call
-                          </DropdownMenuItem>
                           {member.role !== "ADMIN" && (
                             <>
                               <DropdownMenuItem
@@ -380,17 +364,6 @@ export function MembersDialog({ serverId }: MembersDialogProps) {
             }}
             otherUser={selectedMember.user}
             currentUserId={currentUser?.id || ""}
-          />
-          <CallDialog
-            isOpen={isCallOpen}
-            onClose={() => {
-              setIsCallOpen(false)
-              setSelectedMember(null)
-              setCallType(null)
-            }}
-            otherUser={selectedMember.user}
-            currentUserId={currentUser?.id || ""}
-            type={callType || "audio"}
           />
         </>
       )}
