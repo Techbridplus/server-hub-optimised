@@ -196,8 +196,8 @@ function ServerSidebar() {
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-full justify-start">
-                <Avatar className="h-10 w-10 mr-2 overflow-hidden ">
+              <Button variant="ghost" className="w-full justify-start  ">
+                <Avatar className="h-10 w-10 mr-2  ">
                   <AvatarImage
                     src={session.user?.image || "/default-logo.png"}
                     alt={session.user?.name || "User"}
@@ -207,9 +207,9 @@ function ServerSidebar() {
                   </AvatarFallback>
                 </Avatar>
                 
-                <div className="flex flex-col items-start text-sm w-full">
+                <div className="flex flex-col items-start text-sm w-full ">
                   <span
-                    className="font-medium truncate w-full"
+                    className="font-medium truncate "
                     title={session.user?.name || "User Name"}
                   >
                     {session.user?.name || "User Name"}
@@ -218,7 +218,7 @@ function ServerSidebar() {
                     className="text-xs text-muted-foreground truncate w-full"
                     title={session.user?.email || "user@example.com"}
                   >
-                    {session.user?.email || "user@example.com"}
+                    {(session.user?.email || "user@example.com").slice(0, 21)+"..."}
                   </span>
                 </div>
               </Button>

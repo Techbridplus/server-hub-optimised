@@ -30,7 +30,7 @@ const formatDate = (dateString: string) => {
   return date.toLocaleDateString()
 }
 
-export default function NotificationSystem() {
+export default function NotificationSystem({className}:{className?:string}) {
   const [showNotifications, setShowNotifications] = useState(false)
   const [showFullModal, setShowFullModal] = useState(false)
   const [notificationData, setNotificationData] = useState<Notification[]>([])
@@ -98,7 +98,7 @@ export default function NotificationSystem() {
       {/* Bell Icon with notification indicator */}
       <div className="relative" ref={bellRef}>
         <Button onClick={toggleNotifications} className="p-2 rounded-full hover:bg-accent transition-colors" variant="default">
-          <Bell className="h-4 w-4 text-gray-700" />
+          <Bell className={`h-4 w-4 text-gray-700 ${className}`} />
           {unreadCount > 0 && (
             <>
               <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full"></span>

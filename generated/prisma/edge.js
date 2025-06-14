@@ -376,7 +376,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Programming\\Projects\\server-hub-optimised\\generated\\prisma",
+      "value": "C:\\Users\\gaura\\OneDrive\\Desktop\\server-hub-optimised\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -390,7 +390,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Programming\\Projects\\server-hub-optimised\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\gaura\\OneDrive\\Desktop\\server-hub-optimised\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
