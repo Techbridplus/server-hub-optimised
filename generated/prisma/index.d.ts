@@ -3041,6 +3041,7 @@ export namespace Prisma {
     comments: number
     eventComments: number
     commentLikes: number
+    events: number
     Notification: number
   }
 
@@ -3060,6 +3061,7 @@ export namespace Prisma {
     comments?: boolean | UserCountOutputTypeCountCommentsArgs
     eventComments?: boolean | UserCountOutputTypeCountEventCommentsArgs
     commentLikes?: boolean | UserCountOutputTypeCountCommentLikesArgs
+    events?: boolean | UserCountOutputTypeCountEventsArgs
     Notification?: boolean | UserCountOutputTypeCountNotificationArgs
   }
 
@@ -3177,6 +3179,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCommentLikesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CommentLikeWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
   }
 
   /**
@@ -3679,6 +3688,7 @@ export namespace Prisma {
     comments?: boolean | User$commentsArgs<ExtArgs>
     eventComments?: boolean | User$eventCommentsArgs<ExtArgs>
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
+    events?: boolean | User$eventsArgs<ExtArgs>
     userStatus?: boolean | User$userStatusArgs<ExtArgs>
     Notification?: boolean | User$NotificationArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -3716,6 +3726,7 @@ export namespace Prisma {
     comments?: boolean | User$commentsArgs<ExtArgs>
     eventComments?: boolean | User$eventCommentsArgs<ExtArgs>
     commentLikes?: boolean | User$commentLikesArgs<ExtArgs>
+    events?: boolean | User$eventsArgs<ExtArgs>
     userStatus?: boolean | User$userStatusArgs<ExtArgs>
     Notification?: boolean | User$NotificationArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -3740,6 +3751,7 @@ export namespace Prisma {
       comments: Prisma.$CommentPayload<ExtArgs>[]
       eventComments: Prisma.$EventCommentPayload<ExtArgs>[]
       commentLikes: Prisma.$CommentLikePayload<ExtArgs>[]
+      events: Prisma.$EventPayload<ExtArgs>[]
       userStatus: Prisma.$UserStatusPayload<ExtArgs> | null
       Notification: Prisma.$NotificationPayload<ExtArgs>[]
     }
@@ -4132,6 +4144,7 @@ export namespace Prisma {
     comments<T extends User$commentsArgs<ExtArgs> = {}>(args?: Subset<T, User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     eventComments<T extends User$eventCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$eventCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     commentLikes<T extends User$commentLikesArgs<ExtArgs> = {}>(args?: Subset<T, User$commentLikesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    events<T extends User$eventsArgs<ExtArgs> = {}>(args?: Subset<T, User$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userStatus<T extends User$userStatusArgs<ExtArgs> = {}>(args?: Subset<T, User$userStatusArgs<ExtArgs>>): Prisma__UserStatusClient<$Result.GetResult<Prisma.$UserStatusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     Notification<T extends User$NotificationArgs<ExtArgs> = {}>(args?: Subset<T, User$NotificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -4918,6 +4931,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CommentLikeScalarFieldEnum | CommentLikeScalarFieldEnum[]
+  }
+
+  /**
+   * User.events
+   */
+  export type User$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    cursor?: EventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
   }
 
   /**
@@ -14346,6 +14383,7 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     server?: boolean | ServerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     photos?: boolean | Event$photosArgs<ExtArgs>
     videos?: boolean | Event$videosArgs<ExtArgs>
     comments?: boolean | Event$commentsArgs<ExtArgs>
@@ -14372,6 +14410,7 @@ export namespace Prisma {
   export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "startDate" | "endDate" | "location" | "imageUrl" | "serverId" | "isExclusive" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     server?: boolean | ServerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     photos?: boolean | Event$photosArgs<ExtArgs>
     videos?: boolean | Event$videosArgs<ExtArgs>
     comments?: boolean | Event$commentsArgs<ExtArgs>
@@ -14382,6 +14421,7 @@ export namespace Prisma {
     name: "Event"
     objects: {
       server: Prisma.$ServerPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
       photos: Prisma.$EventPhotoPayload<ExtArgs>[]
       videos: Prisma.$EventVideoPayload<ExtArgs>[]
       comments: Prisma.$EventCommentPayload<ExtArgs>[]
@@ -14763,6 +14803,7 @@ export namespace Prisma {
   export interface Prisma__EventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     server<T extends ServerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServerDefaultArgs<ExtArgs>>): Prisma__ServerClient<$Result.GetResult<Prisma.$ServerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     photos<T extends Event$photosArgs<ExtArgs> = {}>(args?: Subset<T, Event$photosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     videos<T extends Event$videosArgs<ExtArgs> = {}>(args?: Subset<T, Event$videosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventVideoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     comments<T extends Event$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Event$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -29774,6 +29815,7 @@ export namespace Prisma {
     comments?: CommentListRelationFilter
     eventComments?: EventCommentListRelationFilter
     commentLikes?: CommentLikeListRelationFilter
+    events?: EventListRelationFilter
     userStatus?: XOR<UserStatusNullableScalarRelationFilter, UserStatusWhereInput> | null
     Notification?: NotificationListRelationFilter
   }
@@ -29804,6 +29846,7 @@ export namespace Prisma {
     comments?: CommentOrderByRelationAggregateInput
     eventComments?: EventCommentOrderByRelationAggregateInput
     commentLikes?: CommentLikeOrderByRelationAggregateInput
+    events?: EventOrderByRelationAggregateInput
     userStatus?: UserStatusOrderByWithRelationInput
     Notification?: NotificationOrderByRelationAggregateInput
   }
@@ -29837,6 +29880,7 @@ export namespace Prisma {
     comments?: CommentListRelationFilter
     eventComments?: EventCommentListRelationFilter
     commentLikes?: CommentLikeListRelationFilter
+    events?: EventListRelationFilter
     userStatus?: XOR<UserStatusNullableScalarRelationFilter, UserStatusWhereInput> | null
     Notification?: NotificationListRelationFilter
   }, "id" | "email">
@@ -30476,6 +30520,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     userId?: StringFilter<"Event"> | string
     server?: XOR<ServerScalarRelationFilter, ServerWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     photos?: EventPhotoListRelationFilter
     videos?: EventVideoListRelationFilter
     comments?: EventCommentListRelationFilter
@@ -30495,6 +30540,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userId?: SortOrder
     server?: ServerOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
     photos?: EventPhotoOrderByRelationAggregateInput
     videos?: EventVideoOrderByRelationAggregateInput
     comments?: EventCommentOrderByRelationAggregateInput
@@ -30517,6 +30563,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     userId?: StringFilter<"Event"> | string
     server?: XOR<ServerScalarRelationFilter, ServerWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     photos?: EventPhotoListRelationFilter
     videos?: EventVideoListRelationFilter
     comments?: EventCommentListRelationFilter
@@ -31466,6 +31513,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -31496,6 +31544,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -31525,6 +31574,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -31554,6 +31604,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -32180,8 +32231,8 @@ export namespace Prisma {
     isExclusive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
     server: ServerCreateNestedOneWithoutEventsInput
+    user: UserCreateNestedOneWithoutEventsInput
     photos?: EventPhotoCreateNestedManyWithoutEventInput
     videos?: EventVideoCreateNestedManyWithoutEventInput
     comments?: EventCommentCreateNestedManyWithoutEventInput
@@ -32215,8 +32266,8 @@ export namespace Prisma {
     isExclusive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
     server?: ServerUpdateOneRequiredWithoutEventsNestedInput
+    user?: UserUpdateOneRequiredWithoutEventsNestedInput
     photos?: EventPhotoUpdateManyWithoutEventNestedInput
     videos?: EventVideoUpdateManyWithoutEventNestedInput
     comments?: EventCommentUpdateManyWithoutEventNestedInput
@@ -32264,7 +32315,6 @@ export namespace Prisma {
     isExclusive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type EventUncheckedUpdateManyInput = {
@@ -33244,6 +33294,12 @@ export namespace Prisma {
     none?: CommentLikeWhereInput
   }
 
+  export type EventListRelationFilter = {
+    every?: EventWhereInput
+    some?: EventWhereInput
+    none?: EventWhereInput
+  }
+
   export type UserStatusNullableScalarRelationFilter = {
     is?: UserStatusWhereInput | null
     isNot?: UserStatusWhereInput | null
@@ -33308,6 +33364,10 @@ export namespace Prisma {
   }
 
   export type CommentLikeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EventOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33635,12 +33695,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type EventListRelationFilter = {
-    every?: EventWhereInput
-    some?: EventWhereInput
-    none?: EventWhereInput
-  }
-
   export type GroupListRelationFilter = {
     every?: GroupWhereInput
     some?: GroupWhereInput
@@ -33651,10 +33705,6 @@ export namespace Prisma {
     every?: ServerTagWhereInput
     some?: ServerTagWhereInput
     none?: ServerTagWhereInput
-  }
-
-  export type EventOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type GroupOrderByRelationAggregateInput = {
@@ -34391,6 +34441,13 @@ export namespace Prisma {
     connect?: CommentLikeWhereUniqueInput | CommentLikeWhereUniqueInput[]
   }
 
+  export type EventCreateNestedManyWithoutUserInput = {
+    create?: XOR<EventCreateWithoutUserInput, EventUncheckedCreateWithoutUserInput> | EventCreateWithoutUserInput[] | EventUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutUserInput | EventCreateOrConnectWithoutUserInput[]
+    createMany?: EventCreateManyUserInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
   export type UserStatusCreateNestedOneWithoutUserInput = {
     create?: XOR<UserStatusCreateWithoutUserInput, UserStatusUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserStatusCreateOrConnectWithoutUserInput
@@ -34513,6 +34570,13 @@ export namespace Prisma {
     connectOrCreate?: CommentLikeCreateOrConnectWithoutUserInput | CommentLikeCreateOrConnectWithoutUserInput[]
     createMany?: CommentLikeCreateManyUserInputEnvelope
     connect?: CommentLikeWhereUniqueInput | CommentLikeWhereUniqueInput[]
+  }
+
+  export type EventUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<EventCreateWithoutUserInput, EventUncheckedCreateWithoutUserInput> | EventCreateWithoutUserInput[] | EventUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutUserInput | EventCreateOrConnectWithoutUserInput[]
+    createMany?: EventCreateManyUserInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
   export type UserStatusUncheckedCreateNestedOneWithoutUserInput = {
@@ -34762,6 +34826,20 @@ export namespace Prisma {
     deleteMany?: CommentLikeScalarWhereInput | CommentLikeScalarWhereInput[]
   }
 
+  export type EventUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EventCreateWithoutUserInput, EventUncheckedCreateWithoutUserInput> | EventCreateWithoutUserInput[] | EventUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutUserInput | EventCreateOrConnectWithoutUserInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutUserInput | EventUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EventCreateManyUserInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutUserInput | EventUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutUserInput | EventUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
   export type UserStatusUpdateOneWithoutUserNestedInput = {
     create?: XOR<UserStatusCreateWithoutUserInput, UserStatusUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserStatusCreateOrConnectWithoutUserInput
@@ -35004,6 +35082,20 @@ export namespace Prisma {
     update?: CommentLikeUpdateWithWhereUniqueWithoutUserInput | CommentLikeUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: CommentLikeUpdateManyWithWhereWithoutUserInput | CommentLikeUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: CommentLikeScalarWhereInput | CommentLikeScalarWhereInput[]
+  }
+
+  export type EventUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EventCreateWithoutUserInput, EventUncheckedCreateWithoutUserInput> | EventCreateWithoutUserInput[] | EventUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutUserInput | EventCreateOrConnectWithoutUserInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutUserInput | EventUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EventCreateManyUserInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutUserInput | EventUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutUserInput | EventUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
   export type UserStatusUncheckedUpdateOneWithoutUserNestedInput = {
@@ -35500,6 +35592,12 @@ export namespace Prisma {
     connect?: ServerWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutEventsInput = {
+    create?: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type EventPhotoCreateNestedManyWithoutEventInput = {
     create?: XOR<EventPhotoCreateWithoutEventInput, EventPhotoUncheckedCreateWithoutEventInput> | EventPhotoCreateWithoutEventInput[] | EventPhotoUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EventPhotoCreateOrConnectWithoutEventInput | EventPhotoCreateOrConnectWithoutEventInput[]
@@ -35548,6 +35646,14 @@ export namespace Prisma {
     upsert?: ServerUpsertWithoutEventsInput
     connect?: ServerWhereUniqueInput
     update?: XOR<XOR<ServerUpdateToOneWithWhereWithoutEventsInput, ServerUpdateWithoutEventsInput>, ServerUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventsInput
+    upsert?: UserUpsertWithoutEventsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventsInput, UserUpdateWithoutEventsInput>, UserUncheckedUpdateWithoutEventsInput>
   }
 
   export type EventPhotoUpdateManyWithoutEventNestedInput = {
@@ -36832,6 +36938,49 @@ export namespace Prisma {
     data: CommentLikeCreateManyUserInput | CommentLikeCreateManyUserInput[]
   }
 
+  export type EventCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    imageUrl?: string | null
+    isExclusive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    server: ServerCreateNestedOneWithoutEventsInput
+    photos?: EventPhotoCreateNestedManyWithoutEventInput
+    videos?: EventVideoCreateNestedManyWithoutEventInput
+    comments?: EventCommentCreateNestedManyWithoutEventInput
+  }
+
+  export type EventUncheckedCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    imageUrl?: string | null
+    serverId: string
+    isExclusive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    photos?: EventPhotoUncheckedCreateNestedManyWithoutEventInput
+    videos?: EventVideoUncheckedCreateNestedManyWithoutEventInput
+    comments?: EventCommentUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutUserInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutUserInput, EventUncheckedCreateWithoutUserInput>
+  }
+
+  export type EventCreateManyUserInputEnvelope = {
+    data: EventCreateManyUserInput | EventCreateManyUserInput[]
+  }
+
   export type UserStatusCreateWithoutUserInput = {
     id?: string
     status?: string
@@ -37315,6 +37464,40 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"CommentLike"> | Date | string
   }
 
+  export type EventUpsertWithWhereUniqueWithoutUserInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutUserInput, EventUncheckedUpdateWithoutUserInput>
+    create: XOR<EventCreateWithoutUserInput, EventUncheckedCreateWithoutUserInput>
+  }
+
+  export type EventUpdateWithWhereUniqueWithoutUserInput = {
+    where: EventWhereUniqueInput
+    data: XOR<EventUpdateWithoutUserInput, EventUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EventUpdateManyWithWhereWithoutUserInput = {
+    where: EventScalarWhereInput
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type EventScalarWhereInput = {
+    AND?: EventScalarWhereInput | EventScalarWhereInput[]
+    OR?: EventScalarWhereInput[]
+    NOT?: EventScalarWhereInput | EventScalarWhereInput[]
+    id?: StringFilter<"Event"> | string
+    title?: StringFilter<"Event"> | string
+    description?: StringNullableFilter<"Event"> | string | null
+    startDate?: DateTimeFilter<"Event"> | Date | string
+    endDate?: DateTimeNullableFilter<"Event"> | Date | string | null
+    location?: StringNullableFilter<"Event"> | string | null
+    imageUrl?: StringNullableFilter<"Event"> | string | null
+    serverId?: StringFilter<"Event"> | string
+    isExclusive?: BoolFilter<"Event"> | boolean
+    createdAt?: DateTimeFilter<"Event"> | Date | string
+    updatedAt?: DateTimeFilter<"Event"> | Date | string
+    userId?: StringFilter<"Event"> | string
+  }
+
   export type UserStatusUpsertWithoutUserInput = {
     update: XOR<UserStatusUpdateWithoutUserInput, UserStatusUncheckedUpdateWithoutUserInput>
     create: XOR<UserStatusCreateWithoutUserInput, UserStatusUncheckedCreateWithoutUserInput>
@@ -37390,6 +37573,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -37419,6 +37603,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -37463,6 +37648,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -37491,6 +37677,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -37520,6 +37707,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -37549,6 +37737,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -37593,6 +37782,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -37621,6 +37811,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -37651,6 +37842,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
   }
 
@@ -37680,6 +37872,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -37724,6 +37917,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
   }
 
@@ -37752,6 +37946,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -37780,6 +37975,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -37809,6 +38005,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -37853,6 +38050,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -37881,6 +38079,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -37910,6 +38109,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -37939,6 +38139,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -37982,7 +38183,7 @@ export namespace Prisma {
     isExclusive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    user: UserCreateNestedOneWithoutEventsInput
     photos?: EventPhotoCreateNestedManyWithoutEventInput
     videos?: EventVideoCreateNestedManyWithoutEventInput
     comments?: EventCommentCreateNestedManyWithoutEventInput
@@ -38180,6 +38381,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -38208,6 +38410,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -38242,24 +38445,6 @@ export namespace Prisma {
   export type EventUpdateManyWithWhereWithoutServerInput = {
     where: EventScalarWhereInput
     data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutServerInput>
-  }
-
-  export type EventScalarWhereInput = {
-    AND?: EventScalarWhereInput | EventScalarWhereInput[]
-    OR?: EventScalarWhereInput[]
-    NOT?: EventScalarWhereInput | EventScalarWhereInput[]
-    id?: StringFilter<"Event"> | string
-    title?: StringFilter<"Event"> | string
-    description?: StringNullableFilter<"Event"> | string | null
-    startDate?: DateTimeFilter<"Event"> | Date | string
-    endDate?: DateTimeNullableFilter<"Event"> | Date | string | null
-    location?: StringNullableFilter<"Event"> | string | null
-    imageUrl?: StringNullableFilter<"Event"> | string | null
-    serverId?: StringFilter<"Event"> | string
-    isExclusive?: BoolFilter<"Event"> | boolean
-    createdAt?: DateTimeFilter<"Event"> | Date | string
-    updatedAt?: DateTimeFilter<"Event"> | Date | string
-    userId?: StringFilter<"Event"> | string
   }
 
   export type GroupUpsertWithWhereUniqueWithoutServerInput = {
@@ -38390,6 +38575,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -38419,6 +38605,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -38510,6 +38697,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -38538,6 +38726,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -38716,6 +38905,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -38745,6 +38935,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -38836,6 +39027,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -38864,6 +39056,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -38964,6 +39157,71 @@ export namespace Prisma {
   export type ServerCreateOrConnectWithoutEventsInput = {
     where: ServerWhereUniqueInput
     create: XOR<ServerCreateWithoutEventsInput, ServerUncheckedCreateWithoutEventsInput>
+  }
+
+  export type UserCreateWithoutEventsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    password?: string | null
+    image?: string | null
+    bio?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    servers?: ServerCreateNestedManyWithoutOwnerInput
+    serverMembers?: ServerMemberCreateNestedManyWithoutUserInput
+    groupMembers?: GroupMemberCreateNestedManyWithoutUserInput
+    savedServers?: SavedServerCreateNestedManyWithoutUserInput
+    twoFactorAuth?: TwoFactorAuthCreateNestedOneWithoutUserInput
+    scheduledDeletions?: ScheduledDeletionCreateNestedManyWithoutUserInput
+    sentMessages?: DirectMessageCreateNestedManyWithoutSenderInput
+    receivedMessages?: DirectMessageCreateNestedManyWithoutReceiverInput
+    messages?: MessageCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutUserInput
+    eventComments?: EventCommentCreateNestedManyWithoutUserInput
+    commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    userStatus?: UserStatusCreateNestedOneWithoutUserInput
+    Notification?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutEventsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    password?: string | null
+    image?: string | null
+    bio?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    servers?: ServerUncheckedCreateNestedManyWithoutOwnerInput
+    serverMembers?: ServerMemberUncheckedCreateNestedManyWithoutUserInput
+    groupMembers?: GroupMemberUncheckedCreateNestedManyWithoutUserInput
+    savedServers?: SavedServerUncheckedCreateNestedManyWithoutUserInput
+    twoFactorAuth?: TwoFactorAuthUncheckedCreateNestedOneWithoutUserInput
+    scheduledDeletions?: ScheduledDeletionUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+    receivedMessages?: DirectMessageUncheckedCreateNestedManyWithoutReceiverInput
+    messages?: MessageUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
+    eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
+    commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
+    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutEventsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
   }
 
   export type EventPhotoCreateWithoutEventInput = {
@@ -39096,6 +39354,75 @@ export namespace Prisma {
     scheduledDeletions?: ScheduledDeletionUncheckedUpdateManyWithoutServerNestedInput
   }
 
+  export type UserUpsertWithoutEventsInput = {
+    update: XOR<UserUpdateWithoutEventsInput, UserUncheckedUpdateWithoutEventsInput>
+    create: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEventsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEventsInput, UserUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type UserUpdateWithoutEventsInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    servers?: ServerUpdateManyWithoutOwnerNestedInput
+    serverMembers?: ServerMemberUpdateManyWithoutUserNestedInput
+    groupMembers?: GroupMemberUpdateManyWithoutUserNestedInput
+    savedServers?: SavedServerUpdateManyWithoutUserNestedInput
+    twoFactorAuth?: TwoFactorAuthUpdateOneWithoutUserNestedInput
+    scheduledDeletions?: ScheduledDeletionUpdateManyWithoutUserNestedInput
+    sentMessages?: DirectMessageUpdateManyWithoutSenderNestedInput
+    receivedMessages?: DirectMessageUpdateManyWithoutReceiverNestedInput
+    messages?: MessageUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutUserNestedInput
+    eventComments?: EventCommentUpdateManyWithoutUserNestedInput
+    commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    userStatus?: UserStatusUpdateOneWithoutUserNestedInput
+    Notification?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEventsInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    servers?: ServerUncheckedUpdateManyWithoutOwnerNestedInput
+    serverMembers?: ServerMemberUncheckedUpdateManyWithoutUserNestedInput
+    groupMembers?: GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+    savedServers?: SavedServerUncheckedUpdateManyWithoutUserNestedInput
+    twoFactorAuth?: TwoFactorAuthUncheckedUpdateOneWithoutUserNestedInput
+    scheduledDeletions?: ScheduledDeletionUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+    receivedMessages?: DirectMessageUncheckedUpdateManyWithoutReceiverNestedInput
+    messages?: MessageUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
+    eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
+    commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
+    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type EventPhotoUpsertWithWhereUniqueWithoutEventInput = {
     where: EventPhotoWhereUniqueInput
     update: XOR<EventPhotoUpdateWithoutEventInput, EventPhotoUncheckedUpdateWithoutEventInput>
@@ -39180,8 +39507,8 @@ export namespace Prisma {
     isExclusive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
     server: ServerCreateNestedOneWithoutEventsInput
+    user: UserCreateNestedOneWithoutEventsInput
     videos?: EventVideoCreateNestedManyWithoutEventInput
     comments?: EventCommentCreateNestedManyWithoutEventInput
   }
@@ -39229,8 +39556,8 @@ export namespace Prisma {
     isExclusive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
     server?: ServerUpdateOneRequiredWithoutEventsNestedInput
+    user?: UserUpdateOneRequiredWithoutEventsNestedInput
     videos?: EventVideoUpdateManyWithoutEventNestedInput
     comments?: EventCommentUpdateManyWithoutEventNestedInput
   }
@@ -39262,8 +39589,8 @@ export namespace Prisma {
     isExclusive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
     server: ServerCreateNestedOneWithoutEventsInput
+    user: UserCreateNestedOneWithoutEventsInput
     photos?: EventPhotoCreateNestedManyWithoutEventInput
     comments?: EventCommentCreateNestedManyWithoutEventInput
   }
@@ -39311,8 +39638,8 @@ export namespace Prisma {
     isExclusive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
     server?: ServerUpdateOneRequiredWithoutEventsNestedInput
+    user?: UserUpdateOneRequiredWithoutEventsNestedInput
     photos?: EventPhotoUpdateManyWithoutEventNestedInput
     comments?: EventCommentUpdateManyWithoutEventNestedInput
   }
@@ -39344,8 +39671,8 @@ export namespace Prisma {
     isExclusive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
     server: ServerCreateNestedOneWithoutEventsInput
+    user: UserCreateNestedOneWithoutEventsInput
     photos?: EventPhotoCreateNestedManyWithoutEventInput
     videos?: EventVideoCreateNestedManyWithoutEventInput
   }
@@ -39397,6 +39724,7 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutUserInput
     comments?: CommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -39426,6 +39754,7 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -39477,8 +39806,8 @@ export namespace Prisma {
     isExclusive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
     server?: ServerUpdateOneRequiredWithoutEventsNestedInput
+    user?: UserUpdateOneRequiredWithoutEventsNestedInput
     photos?: EventPhotoUpdateManyWithoutEventNestedInput
     videos?: EventVideoUpdateManyWithoutEventNestedInput
   }
@@ -39534,6 +39863,7 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutUserNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -39562,6 +39892,7 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -39607,6 +39938,7 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutUserInput
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -39636,6 +39968,7 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -39703,6 +40036,7 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutUserNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -39731,6 +40065,7 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -39982,6 +40317,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -40011,6 +40347,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -40084,6 +40421,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -40112,6 +40450,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -40277,6 +40616,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -40306,6 +40646,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -40375,6 +40716,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -40403,6 +40745,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -40461,6 +40804,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -40490,6 +40834,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -40524,6 +40869,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -40553,6 +40899,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -40597,6 +40944,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -40625,6 +40973,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -40664,6 +41013,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -40692,6 +41042,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -40768,6 +41119,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -40797,6 +41149,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -40938,6 +41291,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -40966,6 +41320,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -41027,6 +41382,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -41056,6 +41412,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -41129,6 +41486,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -41157,6 +41515,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -41219,6 +41578,7 @@ export namespace Prisma {
     likes?: LikeCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -41248,6 +41608,7 @@ export namespace Prisma {
     likes?: LikeUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -41321,6 +41682,7 @@ export namespace Prisma {
     likes?: LikeUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -41349,6 +41711,7 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -41458,6 +41821,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     userStatus?: UserStatusCreateNestedOneWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
@@ -41487,6 +41851,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     userStatus?: UserStatusUncheckedCreateNestedOneWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
@@ -41582,6 +41947,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUpdateOneWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
@@ -41610,6 +41976,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     userStatus?: UserStatusUncheckedUpdateOneWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -41640,6 +42007,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     eventComments?: EventCommentCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeCreateNestedManyWithoutUserInput
+    events?: EventCreateNestedManyWithoutUserInput
     Notification?: NotificationCreateNestedManyWithoutUserInput
   }
 
@@ -41669,6 +42037,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     eventComments?: EventCommentUncheckedCreateNestedManyWithoutUserInput
     commentLikes?: CommentLikeUncheckedCreateNestedManyWithoutUserInput
+    events?: EventUncheckedCreateNestedManyWithoutUserInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -41713,6 +42082,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUpdateManyWithoutUserNestedInput
+    events?: EventUpdateManyWithoutUserNestedInput
     Notification?: NotificationUpdateManyWithoutUserNestedInput
   }
 
@@ -41741,6 +42111,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     eventComments?: EventCommentUncheckedUpdateManyWithoutUserNestedInput
     commentLikes?: CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+    events?: EventUncheckedUpdateManyWithoutUserNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -41866,6 +42237,20 @@ export namespace Prisma {
     id?: string
     commentId: string
     createdAt?: Date | string
+  }
+
+  export type EventCreateManyUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    imageUrl?: string | null
+    serverId: string
+    isExclusive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationCreateManyUserInput = {
@@ -42224,6 +42609,51 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EventUpdateWithoutUserInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isExclusive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    server?: ServerUpdateOneRequiredWithoutEventsNestedInput
+    photos?: EventPhotoUpdateManyWithoutEventNestedInput
+    videos?: EventVideoUpdateManyWithoutEventNestedInput
+    comments?: EventCommentUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutUserInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    serverId?: StringFieldUpdateOperationsInput | string
+    isExclusive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    photos?: EventPhotoUncheckedUpdateManyWithoutEventNestedInput
+    videos?: EventVideoUncheckedUpdateManyWithoutEventNestedInput
+    comments?: EventCommentUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateManyWithoutUserInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    serverId?: StringFieldUpdateOperationsInput | string
+    isExclusive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type NotificationUpdateWithoutUserInput = {
     heading?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
@@ -42336,7 +42766,7 @@ export namespace Prisma {
     isExclusive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutEventsNestedInput
     photos?: EventPhotoUpdateManyWithoutEventNestedInput
     videos?: EventVideoUpdateManyWithoutEventNestedInput
     comments?: EventCommentUpdateManyWithoutEventNestedInput

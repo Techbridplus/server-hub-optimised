@@ -41,7 +41,7 @@ model User {
   comments           Comment[]           @relation("UserComments")
   eventComments      EventComment[]      @relation("EventCommentAuthor")
   commentLikes       CommentLike[]       @relation("CommentLikeUser")
-
+  events              Event[]
   userStatus   UserStatus?
   Notification Notification[]
 }
@@ -181,6 +181,7 @@ model Event {
   userId      String    @db.ObjectId
 
   server   Server         @relation(fields: [serverId], references: [id])
+  user     User          @relation(fields: [userId], references: [id])
   photos   EventPhoto[]
   videos   EventVideo[]
   comments EventComment[]

@@ -39,17 +39,19 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ serv
     const events = await prisma.event.findMany({
       where,
       include: {
-        // organizer: {
-        //   select: {
-        //     id: true,
-        //     name: true,
-        //     image: true,
-        //   },
-        // },
+        videos:true,
+        photos:true,
         _count: {
           select: {
             photos: true,
             videos: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
           },
         },
       },
