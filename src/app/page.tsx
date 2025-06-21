@@ -372,9 +372,9 @@ export default function Home() {
                 <Bell className="h-5 w-5" />
                 <span className="sr-only">Notifications</span>
               </Button> */}
-              <NotificationSystem />
+              {session?.user && <NotificationSystem  className="text-white "/>}
               <CreateServerModal
-                className="hidden md:flex justify-start gap-2 h-9"
+                className={`hidden md:flex justify-start gap-2 h-9 ${!session?.user ? 'opacity-50 pointer-events-none' : ''}`}
               />
             </div>
           </div>
@@ -441,8 +441,8 @@ export default function Home() {
           <Tabs defaultValue="discover" className="mb-8" onValueChange={setActiveTab}>
             <TabsList className="w-full justify-start">
               <TabsTrigger value="discover">Discover</TabsTrigger>
-              <TabsTrigger value="my-servers">My Servers</TabsTrigger>
-              <TabsTrigger value="joined">Joined Servers</TabsTrigger>
+              {session?.user && <TabsTrigger value="my-servers">My Servers</TabsTrigger>}
+              {session?.user && <TabsTrigger value="joined">Joined Servers</TabsTrigger>}
             </TabsList>
 
             <TabsContent value="discover" className="mt-6 animate-fade-in">
@@ -510,7 +510,7 @@ export default function Home() {
             </TabsContent>
             
 
-            <TabsContent value="my-servers" className="mt-6 animate-fade-in">
+            {session?.user && <TabsContent value="my-servers" className="mt-6 animate-fade-in">
               {isLoading ? (
                 <div className={cn(
                   "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -547,9 +547,9 @@ export default function Home() {
                   <CreateServerModal />
                 </div>
               )}
-            </TabsContent>
+            </TabsContent>}
 
-            <TabsContent value="joined" className="mt-6 animate-fade-in">
+            {session?.user && <TabsContent value="joined" className="mt-6 animate-fade-in">
               {isLoading ? (
                 <div className={cn(
                   "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -593,7 +593,7 @@ export default function Home() {
                   </Button>
                 </div>
               )}
-            </TabsContent>
+            </TabsContent>}
           </Tabs>
         </div>
       </main>

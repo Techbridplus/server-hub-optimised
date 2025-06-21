@@ -56,6 +56,8 @@ function ServerSidebar() {
 
     if (session?.user) {
       fetchServers();
+    }else{
+      setIsLoading(false);
     }
   }, [session]);
 
@@ -80,7 +82,7 @@ function ServerSidebar() {
           <span className="font-bold">Server Hub</span>
         </Link>
       </div>
-      <div className="p-4">
+      <div className={`p-4 ${!session?.user ? 'opacity-50 pointer-events-none' : ''}`}>
         <CreateServerModal className="w-full justify-start gap-2" />
       </div>
       <ScrollArea className="flex-1 px-3">
