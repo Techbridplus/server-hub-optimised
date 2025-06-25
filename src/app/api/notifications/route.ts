@@ -15,7 +15,6 @@ export async function POST(req: Request) {
       userId: body.userId,
       message: body.message,
       heading: body.heading,
-      type: body.type || 'info',
     },
   });
   return NextResponse.json(newNotification);
