@@ -136,7 +136,8 @@ export default function Home() {
         console.log("No user session, skipping my servers fetch")
         return
       }
-      
+      console.log("The session id is : ")
+      console.log(session?.user?.id);
       try {
         const response = await axios.get<ServerResponse>(`/api/users/me/servers?owned=true&page=1&limit=10`)
 

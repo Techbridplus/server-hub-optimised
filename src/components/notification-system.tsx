@@ -45,10 +45,26 @@ export default function NotificationSystem({className}:{className?:string}) {
     try {
       setIsLoading(true)
       const res = await fetch('/api/notifications')
-      const data = await res.json()
+
+      if(!res.ok){
+        throw new Error(`HTTP error! Status: ${res.status}`)
+      }
+
+      //check if response has content
+      const text = await res.text()
+      if(!text){
+        console.warn('Empty response from notifications API')
+        setNotificationData([]);
+        return;
+      }
+
+      //parse JSON
+      const data = JSON.parse(text)
       setNotificationData(data)
+
     } catch (error) {
       console.error('Error fetching notifications:', error)
+      setNotificationData([])
     } finally {
       setIsLoading(false)
     }

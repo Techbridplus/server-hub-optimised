@@ -7188,7 +7188,7 @@ export namespace Prisma {
   export type NotificationGroupByOutputType = {
     id: string
     userId: string
-    heading: string
+    heading: string | null
     message: string
     read: boolean
     link: string | null
@@ -7248,7 +7248,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
-      heading: string
+      heading: string | null
       message: string
       read: boolean
       link: string | null
@@ -30020,7 +30020,7 @@ export namespace Prisma {
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     id?: StringFilter<"Notification"> | string
     userId?: StringFilter<"Notification"> | string
-    heading?: StringFilter<"Notification"> | string
+    heading?: StringNullableFilter<"Notification"> | string | null
     message?: StringFilter<"Notification"> | string
     read?: BoolFilter<"Notification"> | boolean
     link?: StringNullableFilter<"Notification"> | string | null
@@ -30045,7 +30045,7 @@ export namespace Prisma {
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     userId?: StringFilter<"Notification"> | string
-    heading?: StringFilter<"Notification"> | string
+    heading?: StringNullableFilter<"Notification"> | string | null
     message?: StringFilter<"Notification"> | string
     read?: BoolFilter<"Notification"> | boolean
     link?: StringNullableFilter<"Notification"> | string | null
@@ -30072,7 +30072,7 @@ export namespace Prisma {
     NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Notification"> | string
     userId?: StringWithAggregatesFilter<"Notification"> | string
-    heading?: StringWithAggregatesFilter<"Notification"> | string
+    heading?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     message?: StringWithAggregatesFilter<"Notification"> | string
     read?: BoolWithAggregatesFilter<"Notification"> | boolean
     link?: StringNullableWithAggregatesFilter<"Notification"> | string | null
@@ -31738,7 +31738,7 @@ export namespace Prisma {
 
   export type NotificationCreateInput = {
     id?: string
-    heading: string
+    heading?: string | null
     message: string
     read?: boolean
     link?: string | null
@@ -31749,7 +31749,7 @@ export namespace Prisma {
   export type NotificationUncheckedCreateInput = {
     id?: string
     userId: string
-    heading: string
+    heading?: string | null
     message: string
     read?: boolean
     link?: string | null
@@ -31757,7 +31757,7 @@ export namespace Prisma {
   }
 
   export type NotificationUpdateInput = {
-    heading?: StringFieldUpdateOperationsInput | string
+    heading?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     read?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31767,7 +31767,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateInput = {
     userId?: StringFieldUpdateOperationsInput | string
-    heading?: StringFieldUpdateOperationsInput | string
+    heading?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     read?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31777,7 +31777,7 @@ export namespace Prisma {
   export type NotificationCreateManyInput = {
     id?: string
     userId: string
-    heading: string
+    heading?: string | null
     message: string
     read?: boolean
     link?: string | null
@@ -31785,7 +31785,7 @@ export namespace Prisma {
   }
 
   export type NotificationUpdateManyMutationInput = {
-    heading?: StringFieldUpdateOperationsInput | string
+    heading?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     read?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31794,7 +31794,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateManyInput = {
     userId?: StringFieldUpdateOperationsInput | string
-    heading?: StringFieldUpdateOperationsInput | string
+    heading?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     read?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36851,7 +36851,7 @@ export namespace Prisma {
 
   export type NotificationCreateWithoutUserInput = {
     id?: string
-    heading: string
+    heading?: string | null
     message: string
     read?: boolean
     link?: string | null
@@ -36860,7 +36860,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedCreateWithoutUserInput = {
     id?: string
-    heading: string
+    heading?: string | null
     message: string
     read?: boolean
     link?: string | null
@@ -37358,7 +37358,7 @@ export namespace Prisma {
     NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
     id?: StringFilter<"Notification"> | string
     userId?: StringFilter<"Notification"> | string
-    heading?: StringFilter<"Notification"> | string
+    heading?: StringNullableFilter<"Notification"> | string | null
     message?: StringFilter<"Notification"> | string
     read?: BoolFilter<"Notification"> | boolean
     link?: StringNullableFilter<"Notification"> | string | null
@@ -41870,7 +41870,7 @@ export namespace Prisma {
 
   export type NotificationCreateManyUserInput = {
     id?: string
-    heading: string
+    heading?: string | null
     message: string
     read?: boolean
     link?: string | null
@@ -42225,7 +42225,7 @@ export namespace Prisma {
   }
 
   export type NotificationUpdateWithoutUserInput = {
-    heading?: StringFieldUpdateOperationsInput | string
+    heading?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     read?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42233,7 +42233,7 @@ export namespace Prisma {
   }
 
   export type NotificationUncheckedUpdateWithoutUserInput = {
-    heading?: StringFieldUpdateOperationsInput | string
+    heading?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     read?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42241,7 +42241,7 @@ export namespace Prisma {
   }
 
   export type NotificationUncheckedUpdateManyWithoutUserInput = {
-    heading?: StringFieldUpdateOperationsInput | string
+    heading?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
     read?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
