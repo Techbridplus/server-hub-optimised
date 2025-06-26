@@ -6,7 +6,6 @@ import { CheckCheck} from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import axios from "axios"
 
 interface Notification {
   id: string;

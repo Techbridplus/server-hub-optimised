@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Users, Search, Shield, UserMinus, MoreHorizontal, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -45,12 +45,32 @@ export function MembersDialog({serverId }: MembersDialogProps) {
   
   const currentUser = session?.user
   
+  const fetchMembers = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch(`/api/servers/${serverId}/members`)
+      if (!response.ok) throw new Error("Failed to fetch members")
+      
+      const data = await response.json()
+      setMembers(data)
+    } catch (error) {
+      console.error("Error fetching members:", error)
+      toast({
+        title: "Error",
+        description: "Failed to load server members",
+        variant: "destructive"
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [serverId, toast])
+  
   // Fetch members data
   useEffect(() => {
     if (open) {
       fetchMembers()
     }
-  }, [open, serverId])
+  }, [open, fetchMembers])
   
   // Initialize socket connection
   useEffect(() => {
@@ -83,26 +103,6 @@ export function MembersDialog({serverId }: MembersDialogProps) {
       }
     }
   }, [open, serverId, currentUser])
-  
-  const fetchMembers = async () => {
-    try {
-      setIsLoading(true)
-      const response = await fetch(`/api/servers/${serverId}/members`)
-      if (!response.ok) throw new Error("Failed to fetch members")
-      
-      const data = await response.json()
-      setMembers(data)
-    } catch (error) {
-      console.error("Error fetching members:", error)
-      toast({
-        title: "Error",
-        description: "Failed to load server members",
-        variant: "destructive"
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   const filteredMembers = members.filter((member) => 
     (member.user.name?.toLowerCase() || "").includes(searchQuery.toLowerCase())

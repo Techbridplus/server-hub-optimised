@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         heading: body.heading,
       },
       body.link ? { link: body.link } : {}
-    ),a
+    )
   });
   return NextResponse.json(newNotification);
 }

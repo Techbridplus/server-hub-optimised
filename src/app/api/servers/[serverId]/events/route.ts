@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { authMiddlewareAppRouter,  } from "@/lib/auth"
-import prisma from "@/lib/prisma" // Import prisma
+import { prisma } from "@/lib/prisma" // Import prisma
 
 // GET /api/servers/[serverId]/events - Get server events
 export async function GET(req: NextRequest, { params }: { params: Promise<{ serverId: string }> }) {

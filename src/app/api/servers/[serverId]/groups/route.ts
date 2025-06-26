@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { authMiddlewareAppRouter } from "@/lib/auth"
-import prisma from "@/lib/prisma"
+import { prisma } from "@/lib/prisma"
 import { MemberRole } from "../../../../../../generated/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"

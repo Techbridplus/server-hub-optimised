@@ -110,6 +110,11 @@ export default function GroupPage() {
             router.push(`/group/${groupId}?channel=${firstTextChannel.id}`)
           }
         }
+
+        // Initialize socket after group data is loaded
+        if (session?.user?.id && data.serverId) {
+          initSocket(session.user.id, data.serverId)
+        }
       } catch (error) {
         console.error("Error fetching group data:", error)
         toast({
@@ -118,13 +123,12 @@ export default function GroupPage() {
           variant: "destructive",
         })
       } finally {
-        initSocket(session?.user?.id, group?.serverId)
         setIsLoading(false)
       }
     }
     
     fetchGroupData()
-  }, [groupId, channelId, toast, router])
+  }, [groupId, channelId, toast, router, session?.user?.id])
 
   
   // Handle direct message
