@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Server } from "../../generated/prisma"
+import { useSession } from "next-auth/react"
 
 
 interface ServerCardProps {
@@ -43,6 +44,7 @@ export function ServerCard({
 }: ServerCardProps) {
   const [isJoining, setIsJoining] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
+  const { data: session } = useSession()
   const handleJoin = async () => {
     if (onJoin) {
       setIsJoining(true);
@@ -134,7 +136,7 @@ export function ServerCard({
             <span>{(server._count?.members || 0).toLocaleString()} members</span>
           </div>
 
-          <div className="flex justify-center gap-2">
+          {session?.user && <div className="flex justify-center gap-2">
             {isAdmin ? (
               <Button variant="default" className="w-full" asChild>
                 <Link href={`/server/${server.id}`}>
@@ -189,7 +191,7 @@ export function ServerCard({
                 
               </>
             )}
-          </div>
+          </div>}
         </div>
       </Card>
     )
