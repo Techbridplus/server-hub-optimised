@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import Image from "next/image"
 import { Camera, Loader2, Save, Trash, Upload, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -47,6 +47,35 @@ export function EditServerForm({ serverId, onSave }: EditServerFormProps) {
 
   const isDataEdited = JSON.stringify(ServerData) !== JSON.stringify(originalServerData)
 
+  const deleteServer = useCallback(async () => {
+    try {
+      // If we have a scheduled deletion ID, use it to confirm the deletion
+      if (scheduledDeletionId) {
+        await axios.post(`/api/servers/${serverId}/confirm-deletion`, {
+          deletionId: scheduledDeletionId
+        })
+      } else {
+        // Fallback to direct deletion if no scheduled deletion exists
+        await axios.delete(`/api/servers/${serverId}`)
+      }
+      
+      toast({
+        title: "Server deleted",
+        description: "Your server has been permanently deleted.",
+      })
+      
+      // Redirect to home page
+      router.push("/")
+    } catch (error) {
+      console.error("Error deleting server:", error)
+      toast({
+        title: "Deletion failed",
+        description: "There was an error deleting your server. Please try again.",
+        variant: "destructive",
+      })
+    }
+  }, [scheduledDeletionId, serverId, router])
+
   // Check for existing scheduled deletion on component mount
   useEffect(() => {
     const checkExistingDeletion = async () => {
@@ -92,7 +121,17 @@ export function EditServerForm({ serverId, onSave }: EditServerFormProps) {
     }
     
     checkExistingDeletion()
-  }, [serverId])
+
+    // Cleanup function to clear timers when component unmounts or serverId changes
+    return () => {
+      if (deleteTimerRef.current) {
+        clearInterval(deleteTimerRef.current)
+      }
+      if (deleteTimeoutRef.current) {
+        clearTimeout(deleteTimeoutRef.current)
+      }
+    }
+  }, [serverId, deleteServer])
 
   useEffect(() => {
     const fetchServerData = async () => {
@@ -315,35 +354,6 @@ export function EditServerForm({ serverId, onSave }: EditServerFormProps) {
     } else {
       setIsDeleting(false)
       setDeleteTimeRemaining(null)
-    }
-  }
-
-  const deleteServer = async () => {
-    try {
-      // If we have a scheduled deletion ID, use it to confirm the deletion
-      if (scheduledDeletionId) {
-        await axios.post(`/api/servers/${serverId}/confirm-deletion`, {
-          deletionId: scheduledDeletionId
-        })
-      } else {
-        // Fallback to direct deletion if no scheduled deletion exists
-        await axios.delete(`/api/servers/${serverId}`)
-      }
-      
-      toast({
-        title: "Server deleted",
-        description: "Your server has been permanently deleted.",
-      })
-      
-      // Redirect to home page
-      router.push("/")
-    } catch (error) {
-      console.error("Error deleting server:", error)
-      toast({
-        title: "Deletion failed",
-        description: "There was an error deleting your server. Please try again.",
-        variant: "destructive",
-      })
     }
   }
 

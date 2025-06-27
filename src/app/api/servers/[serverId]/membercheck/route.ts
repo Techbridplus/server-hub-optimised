@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { authMiddlewareAppRouter } from "@/lib/auth"
-import prisma from "@/lib/prisma"
+import { prisma } from "@/lib/prisma"
 
 export async function GET(_req : NextRequest,{ params }: { params: Promise<{ groupId: string }> }) {
     const {groupId} = await params

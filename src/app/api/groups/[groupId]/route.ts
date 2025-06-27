@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-import prisma from "@/lib/prisma"
+import { prisma } from "@/lib/prisma"
 import { authMiddlewareAppRouter } from "@/lib/auth"
 import { MemberRole } from "../../../../../generated/prisma"
 
@@ -53,7 +53,7 @@ export async function GET(
     }
 
     // Check if user is a member of the group
-    const isMember = group.members.some((member) => member.userId === session.user.id)
+    const isMember = group.members.some((member: { userId: string; user: { id: string; name: string | null; image: string | null } }) => member.userId === session.user.id)
     if (!isMember && group.isPrivate) {
       return NextResponse.json({ error: "You don't have access to this group" }, { status: 403 })
     }

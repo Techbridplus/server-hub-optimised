@@ -1,14 +1,19 @@
-import { PrismaClient } from "../../generated/prisma"
+import { PrismaClient } from '../../generated/prisma'
 
-// PrismaClient is attached to the `global` object in development to prevent
-// exhausting your database connection limit.
-// Learn more: https://pris.ly/d/help/next-js-best-practices
+declare global {
+  // eslint-disable-next-line no-var
+  var __cachedPrisma: PrismaClient
+}
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient }
+let prisma: PrismaClient
+if (process.env.NODE_ENV === 'production') {
+  prisma = new PrismaClient()
+} else {
+  if (!global.__cachedPrisma) {
+    global.__cachedPrisma = new PrismaClient()
+  }
+  prisma = global.__cachedPrisma
+}
 
-export const prisma = globalForPrisma.prisma || new PrismaClient()
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
-
-export default prisma
+export { prisma }
 

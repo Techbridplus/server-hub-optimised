@@ -220,7 +220,6 @@ export function CreateEventDialog({ serverId, buttonSize = "default", onEventCre
           userId: session?.user?.id,
           heading: `New Event Created ⏳`,
           message: `"New event ${eventData.title}" created successfully.`,
-          type: 'success',
         }),
       });
 
@@ -267,6 +266,8 @@ export function CreateEventDialog({ serverId, buttonSize = "default", onEventCre
                     <Image
                       src={bannerImage}
                       alt="Banner preview"
+                      width={800}
+                      height = {400}
                       className="object-cover h-full w-full"
                     />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">

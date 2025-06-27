@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { NextRequest } from "next/server"
 import { authMiddlewareAppRouter } from "@/lib/auth"
-import prisma from "@/lib/prisma"
+import { prisma } from "@/lib/prisma"
 
 export async function GET(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -45,15 +45,15 @@ export async function GET(
       }
     })
 
-    const userIds = members.map(m => m.userId);
+    const userIds = members.map((m: { userId: string }) => m.userId);
     const statuses = await prisma.userStatus.findMany({
       where: { userId: { in: userIds } }
     });
-    const statusMap = Object.fromEntries(statuses.map(s => [s.userId, s]));
+    const statusMap = Object.fromEntries(statuses.map((s: { userId: string; status?: string; lastSeen?: Date }) => [s.userId, s]));
 
     // Format the response
-    const formattedMembers = members.map(member => {
-      const status = statusMap[member.userId];
+    const formattedMembers = members.map((member: { userId: string; joinedAt: Date; user: { id: string; name: string | null; image: string | null } }) => {
+      const status = statusMap[member.userId] as { status?: string; lastSeen?: Date } | undefined;
       return {
         ...member,
         user: {

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { authMiddlewareAppRouter } from "@/lib/auth"
-import prisma from "@/lib/prisma"
+import { prisma } from "@/lib/prisma"
 
 // POST /api/servers/[serverId]/join - Join a server
 export async function POST(

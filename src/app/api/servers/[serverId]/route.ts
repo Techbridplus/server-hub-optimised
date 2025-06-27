@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { authMiddlewareAppRouter, isServerAdmin } from "@/lib/auth"
-import prisma from "@/lib/prisma"
-import { Announcement } from "../../../../../generated/prisma"
+import { prisma } from "@/lib/prisma"
 
 
 // GET /api/servers/[serverId] - Get server details
@@ -84,7 +83,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ ser
       }
 
       // Get announcements separately with error handling
-      let announcements: Announcement[] = []
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let announcements: any[] = []
       try {
         // Get all announcements for the server
         const allAnnouncements = await prisma.announcement.findMany({
@@ -97,11 +97,11 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ ser
         })
         
         // Filter out announcements with null authorId
-        const validAnnouncements = allAnnouncements.filter(a => a.authorId)
+        const validAnnouncements = allAnnouncements.filter((a: { authorId: string | null }) => a.authorId)
         
         // Get author information for valid announcements
         if (validAnnouncements.length > 0) {
-          const authorIds = validAnnouncements.map(a => a.authorId)
+          const authorIds = validAnnouncements.map((a: { authorId: string }) => a.authorId)
           const authors = await prisma.user.findMany({
             where: {
               id: {
@@ -116,10 +116,11 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ ser
           })
           
           // Create a map of author IDs to author objects
-          const authorMap = new Map(authors.map(a => [a.id, a]))
+          const authorMap = new Map(authors.map((a: { id: string }) => [a.id, a]))
           
           // Combine announcements with author information
-          announcements = validAnnouncements.map(a => ({
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          announcements = validAnnouncements.map((a: any) => ({
             ...a,
             author: authorMap.get(a.authorId) || null
           }))

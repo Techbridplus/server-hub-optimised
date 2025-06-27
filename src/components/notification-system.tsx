@@ -12,15 +12,15 @@ interface Notification {
   userId: string;
   heading: string;
   message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
   read: boolean;
-  createdAt: string;
+  link: string | null;
+  createdAt: Date;
 }
 
 
 // Format date to relative time
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
+const formatDate = (CreationDate: Date) => {
+  const date = new Date(CreationDate);
   const now = new Date()
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
   
@@ -44,10 +44,26 @@ export default function NotificationSystem({className}:{className?:string}) {
     try {
       setIsLoading(true)
       const res = await fetch('/api/notifications')
-      const data = await res.json()
+
+      if(!res.ok){
+        throw new Error(`HTTP error! Status: ${res.status}`)
+      }
+
+      //check if response has content
+      const text = await res.text()
+      if(!text){
+        console.warn('Empty response from notifications API')
+        setNotificationData([]);
+        return;
+      }
+
+      //parse JSON
+      const data = JSON.parse(text)
       setNotificationData(data)
+
     } catch (error) {
       console.error('Error fetching notifications:', error)
+      setNotificationData([])
     } finally {
       setIsLoading(false)
     }
@@ -79,8 +95,29 @@ export default function NotificationSystem({className}:{className?:string}) {
     }
   }, [])
 
-  const handleMarkAllAsRead = () => {
-    setNotificationData((prev) => prev.map((n) => ({ ...n, read: true })))
+  const handleMarkAllAsRead = async () => {
+    try{
+      //update local state immediately for better ux
+      setNotificationData((prev) => prev.map((n) => ({ ...n, read: true })))
+
+      const response = await fetch('/api/notifications/mark-all-read', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to mark notifications as read');
+    }
+    }
+    catch(error){
+      console.error('Error marking notifications as read:', error)
+      //Revert local state on error
+      fetchNotifications()
+    }
   }
 
   const toggleNotifications = () => {
@@ -125,10 +162,6 @@ export default function NotificationSystem({className}:{className?:string}) {
                 <span className="text-sm">Mark all as read</span>
               </Button>
             </CardHeader>
-
-            <div className="py-2 px-4 bg-blue-50/50 border-b">
-              <h3 className="text-gray-500 font-medium text-sm">Today</h3>
-            </div>
 
             <CardContent className="p-0 max-h-[350px] overflow-y-auto">
               {isLoading ? (
