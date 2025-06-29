@@ -69,7 +69,7 @@ export function GroupCard({ group, serverId, canEdit = false }: GroupCardProps) 
   // Check if user is already a member
   // console.log("currentUserId", currentUserId)
   const isAdminOrModerator = currentUserId && group.members && (group.members[0]?.role === "ADMIN" || group.members[0]?.role === "MODERATOR")  
-  console.log("isAdminOrModerator", isAdminOrModerator)
+  console.log("groupId", group.id)
   // Check if user is an admin or moderator
   const [isGroupMember, setIsGroupMember] = useState(false) 
 
@@ -82,10 +82,8 @@ export function GroupCard({ group, serverId, canEdit = false }: GroupCardProps) 
       }
 
       try {
-        const response = await axios.post(`/api/servers/${serverId}/membercheck`, null, {
-          params: {
-            groupId: group.id,
-          },
+        const response = await axios.post(`/api/servers/${serverId}/membercheck`, {
+            groupId: group.id
         })
         
         // console.log("response", response)
