@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { ArrowLeft, ChevronDown, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -25,7 +25,7 @@ export default function PastEventsPage() {
   const params = useParams();
   const serverId = params.serverId as string
 
-  const fetchEvents = async (pageNum: number, isLoadMore = false) => {
+  const fetchEvents = useCallback(async (pageNum: number, isLoadMore = false) => {
     try {
       const response = await fetch(
         `/api/servers/${serverId}/events/past?page=${pageNum}&search=${searchQuery}&sort=${sortBy}&filter=${filterBy}`
@@ -49,13 +49,13 @@ export default function PastEventsPage() {
       setLoading(false)
       setLoadingMore(false)
     }
-  }
+  }, [serverId, searchQuery, sortBy, filterBy, toast])
 
   useEffect(() => {
     setLoading(true)
     setPage(1)
     fetchEvents(1)
-  }, [searchQuery, sortBy, filterBy])
+  }, [fetchEvents])
 
   const handleLoadMore = () => {
     setLoadingMore(true)
