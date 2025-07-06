@@ -176,8 +176,7 @@ export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onA
             }
           })
           
-          // Note: Socket cleanup should be done in a useEffect at the component level
-          // This inline code doesn't return anything from the try block
+          // We don't disconnect here as the socket is managed by the useEffect cleanup
         }
       } catch (error) {
         // Don't block the flow if notification fails

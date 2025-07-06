@@ -145,6 +145,10 @@ export function CreateGroupDialog({ serverId, buttonSize = "default", onGroupCre
       }
 
 
+      // Get the group ID from the response
+      const groupData = await response.json();
+      const groupId = groupData.id;
+      
       // Reset form
       setName("")
       setDescription("")
@@ -158,6 +162,44 @@ export function CreateGroupDialog({ serverId, buttonSize = "default", onGroupCre
         title: "Success",
         description: "Group created successfully!",
       })
+      
+      // Create notification in database
+      try {
+        if (session?.user?.id) {
+          // Ensure socket is initialized with both userId and serverId
+          await initSocket(session.user.id, serverId);
+          
+          // Create notification via API
+          await fetch('/api/notifications', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              userId: session.user.id,
+              heading: "New Group Created 👥",
+              message: `You've successfully created "${name}" group.`,
+              link: `/server/${serverId}/group/${groupId}`
+            }),
+          });
+          
+          // Send real-time notification via Socket.io
+          const socket = getSocket();
+          socket.emit('new-notification', {
+            userId: session.user.id,
+            heading: "New Group Created 👥",
+            message: `You've successfully created "${name}" group.`,
+            read: false,
+            link: `/server/${serverId}/group/${groupId}`,
+            createdAt: new Date()
+          });
+          
+          // We don't disconnect here as the socket is managed by the useEffect cleanup
+        }
+      } catch (error) {
+        // Don't block the flow if notification fails
+        console.error("Failed to create notification:", error);
+      }
 
       // Call onGroupCreated callback if provided
       onGroupCreated?.()

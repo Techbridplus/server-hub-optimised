@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Plus, X } from "lucide-react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -34,7 +34,7 @@ import { useToast } from "@/components/ui/use-toast"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-import { getSocket, initSocket } from "@/lib/socket-client"
+import { getSocket, initSocket, disconnectSocket } from "@/lib/socket-client"
 
 const formSchema = z.object({
   name: z.string().min(2, "Server name must be at least 2 characters"),
@@ -61,6 +61,21 @@ export function CreateServerModal({ buttonText = "Create Server", className = ""
   const { toast } = useToast()
   const router = useRouter()
   const { data: session } = useSession()
+  
+  // Handle socket cleanup when component unmounts or page unloads
+  useEffect(() => {
+    // Cleanup function for when component unmounts or page changes
+    const handleBeforeUnload = () => {
+      disconnectSocket();
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      disconnectSocket();
+    };
+  }, []);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -110,8 +125,8 @@ export function CreateServerModal({ buttonText = "Create Server", className = ""
       // Create notification in database
       try {
         if (session?.user?.id) {
-          // Ensure socket is initialized
-          await initSocket(session.user.id);
+          // Ensure socket is initialized with serverId
+          await initSocket(session.user.id, serverId);
           
           // Create notification via API
           await fetch('/api/notifications', {
@@ -137,6 +152,8 @@ export function CreateServerModal({ buttonText = "Create Server", className = ""
             link: `/server/${serverId}`,
             createdAt: new Date()
           });
+          
+          // We don't disconnect here as the socket is managed by the useEffect cleanup
         }
       } catch (error) {
         // Don't block the flow if notification fails

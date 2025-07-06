@@ -304,6 +304,8 @@ export function CreateEventDialog({
         message: `New event "${eventData.title}" created successfully.`,
         link: `/servers/${serverId}/event/${eventId}`, // Optional - link to the events page
       } as NotificationPayload);
+      
+      // We don't disconnect here as the socket is managed by the useEffect cleanup
 
       // Call the callback if provided
       if (onEventCreated) {
