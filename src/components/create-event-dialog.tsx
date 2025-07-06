@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CalendarPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +37,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { UploadButton } from "@/components/upload-button";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { getSocket } from "@/lib/socket-client";
+import { getSocket, initSocket, disconnectSocket } from "@/lib/socket-client";
 
 interface CreateEventDialogProps {
   serverId: string;
@@ -66,7 +66,26 @@ export function CreateEventDialog({
   const [eventType, setEventType] = useState("gaming");
   const [bannerImage, setBannerImage] = useState<string | null>(null);
   const { data: session } = useSession();
-  const socket = getSocket();
+  
+  // Handle socket cleanup when component unmounts or page unloads
+  useEffect(() => {
+    if (!session?.user?.id) return;
+    
+    // Initialize socket when component mounts
+    initSocket(session.user.id, serverId);
+    
+    // Cleanup function for when component unmounts or page changes
+    const handleBeforeUnload = () => {
+      disconnectSocket();
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      disconnectSocket();
+    };
+  }, [session?.user?.id, serverId]);
 
   const validateStartTime = (time: string) => {
     const selectedDate = new Date(date || new Date());
@@ -248,15 +267,24 @@ export function CreateEventDialog({
       });
 
       //I will enter notification here
-      await fetch("/api/notifications", {
-        method: "POST",
-        body: JSON.stringify({
-          userId: session?.user?.id,
-          heading: `New Event Created ⏳`,
-          message: `"New event ${eventData.title}" created successfully.`,
-          link: `/server/${serverId}/event/${eventId}`, // Use the correct format with the event ID
-        }),
-      });
+      // Ensure socket is initialized with both userId and serverId
+      if (session?.user?.id) {
+        await initSocket(session.user.id, serverId);
+        
+        // Create notification via API
+        await fetch("/api/notifications", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId: session.user.id,
+            heading: `New Event Created ⏳`,
+            message: `"${eventData.title}" created successfully.`,
+            link: `/server/${serverId}/event/${eventId}`, // Use the correct format with the event ID
+          }),
+        });
+      }
 
       interface NotificationPayload {
         id?: string;
@@ -268,6 +296,8 @@ export function CreateEventDialog({
         createdAt?: Date;
       }
 
+      // Get socket instance and emit notification
+      const socket = getSocket();
       socket.emit("new-notification", {
         userId: session?.user?.id,
         heading: `New Event Created ⏳`,

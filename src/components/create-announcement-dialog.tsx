@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,6 +19,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/components/ui/use-toast"
+import { useSession } from "next-auth/react"
+import { getSocket, initSocket, disconnectSocket } from "@/lib/socket-client"
 
 interface CreateAnnouncementDialogProps {
   serverId: string
@@ -28,13 +30,33 @@ interface CreateAnnouncementDialogProps {
 
 export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onAnnouncementCreated }: CreateAnnouncementDialogProps) {
   const [open, setOpen] = useState(false)
+  const { data: session } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
+  
+  // Handle socket cleanup when component unmounts or page unloads
+  useEffect(() => {
+    if (!session?.user?.id) return;
+    
+    // Initialize socket when component mounts
+    initSocket(session.user.id, serverId);
+    
+    // Cleanup function for when component unmounts or page changes
+    const handleBeforeUnload = () => {
+      disconnectSocket();
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      disconnectSocket();
+    };
+  }, [session?.user?.id, serverId]);
 
   // Form state
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
-  const [isImportant, setIsImportant] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,7 +78,7 @@ export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onA
       const announcementData = {
         title,
         content,
-        isImportant,
+        isImportant: false, // Setting default value since we removed the option
         serverId,
       }
 
@@ -77,8 +99,11 @@ export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onA
       // Reset form
       setTitle("")
       setContent("")
-      setIsImportant(false)
 
+      // Get announcement data from response
+      const createdAnnouncement = await response.json()
+      const announcementId = createdAnnouncement.id
+      
       // Close dialog
       setOpen(false)
 
@@ -87,6 +112,77 @@ export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onA
         title: "Announcement created",
         description: "Your announcement has been posted successfully",
       })
+      
+      // Create notification in database
+      try {
+        if (session?.user?.id) {
+          // Ensure socket is initialized with both userId and serverId
+          await initSocket(session.user.id, serverId)
+          
+          // Fetch server members to notify them all
+          const membersResponse = await fetch(`/api/servers/${serverId}/members`)
+          
+          if (!membersResponse.ok) {
+            throw new Error("Failed to fetch server members")
+          }
+          
+          const membersData = await membersResponse.json()
+          const members = membersData.members || []
+          
+          if (!members.length) {
+            console.warn("No server members found to notify")
+          }
+          
+          // Prepare notification content
+          const notificationHeading = `Announcement: ${title}`
+          const notificationMessage = `A new announcement has been posted in your server.`
+          const notificationLink = `/server/${serverId}?announcement=${announcementId}`
+          
+          // Batch create notifications for all members
+          for (const member of members) {
+            // Skip creating DB notification for the creator (they already know they created it)
+            if (member.userId !== session.user.id) {
+              await fetch('/api/notifications', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  userId: member.userId,
+                  heading: notificationHeading,
+                  message: notificationMessage,
+                  link: notificationLink
+                }),
+              })
+            }
+          }
+          
+          // Send real-time notification via Socket.io
+          const socket = getSocket()
+          
+          // Emit to server room for all members
+          socket.emit('server-announcement', {
+            serverId: serverId,
+            announcement: {
+              title: title,
+              createdBy: session.user.name
+            },
+            notification: {
+              heading: notificationHeading,
+              message: notificationMessage,
+              read: false,
+              link: notificationLink,
+              createdAt: new Date()
+            }
+          })
+          
+          // Note: Socket cleanup should be done in a useEffect at the component level
+          // This inline code doesn't return anything from the try block
+        }
+      } catch (error) {
+        // Don't block the flow if notification fails
+        console.error("Failed to create notification:", error)
+      }
 
       // Call the callback if provided
       if (onAnnouncementCreated) {
@@ -143,10 +239,7 @@ export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onA
               />
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Switch id="important" checked={isImportant} onCheckedChange={setIsImportant} />
-              <Label htmlFor="important">Mark as important</Label>
-            </div>
+            {/* Important switch removed as per requirement */}
           </div>
 
           <DialogFooter>
