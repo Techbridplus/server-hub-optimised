@@ -6,7 +6,7 @@ import { CheckCheck} from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { initSocket } from "@/lib/socket-client"
+import { initSocket, disconnectSocket } from "@/lib/socket-client"
 import { useSession } from "next-auth/react"
 import { getSocket } from "@/lib/socket-client"
 
@@ -135,8 +135,7 @@ export default function NotificationSystem({className}:{className?:string}) {
 useEffect(() => {
   // Handle page close/refresh
   const handleBeforeUnload = () => {
-    // Import the function to disconnect the socket
-    const { disconnectSocket } = require('@/lib/socket-client');
+    // Use the already imported disconnectSocket function
     disconnectSocket();
   };
 
