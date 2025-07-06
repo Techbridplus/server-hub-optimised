@@ -174,13 +174,24 @@ useEffect(() => {
   }
 
   const toggleNotifications = () => {
-    setShowNotifications((prev) => !prev)
-    setShowFullModal(false)
+    const newState = !showNotifications;
+    setShowNotifications(newState);
+    setShowFullModal(false);
+    
+    // Mark all notifications as read when opening the notification card
+    if (newState && notificationData.some(n => !n.read)) {
+      handleMarkAllAsRead(); // This updates both UI and database
+    }
   }
 
   const openFullModal = () => {
-    setShowFullModal(true)
-    setShowNotifications(false)
+    setShowFullModal(true);
+    setShowNotifications(false);
+    
+    // Mark all notifications as read when opening the full modal
+    if (notificationData.some(n => !n.read)) {
+      handleMarkAllAsRead(); // This updates both UI and database
+    }
   }
 
   return (
