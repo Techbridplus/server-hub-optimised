@@ -40,7 +40,6 @@ type AxiosServerResponse = {
 }
 
 export default function Home() {
-
   const { data: session } = useSession()
   const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")

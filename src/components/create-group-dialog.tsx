@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Users, Upload, X } from "lucide-react"
 import Image from "next/image"
@@ -21,6 +21,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/hooks/use-toast"
+import { useSession } from "next-auth/react"
+import { getSocket, initSocket, disconnectSocket } from "@/lib/socket-client"
 
 interface CreateGroupDialogProps {
   serverId: string
@@ -33,6 +35,27 @@ export function CreateGroupDialog({ serverId, buttonSize = "default", onGroupCre
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const { data: session } = useSession()
+  
+  // Handle socket cleanup when component unmounts or page unloads
+  useEffect(() => {
+    if (!session?.user?.id) return;
+    
+    // Initialize socket when component mounts
+    initSocket(session.user.id, serverId);
+    
+    // Cleanup function for when component unmounts or page changes
+    const handleBeforeUnload = () => {
+      disconnectSocket();
+    }
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      disconnectSocket();
+    };
+  }, [session?.user?.id, serverId]);
 
   // Form state
   const [name, setName] = useState("")
@@ -122,6 +145,10 @@ export function CreateGroupDialog({ serverId, buttonSize = "default", onGroupCre
       }
 
 
+      // Get the group ID from the response
+      const groupData = await response.json();
+      const groupId = groupData.id;
+      
       // Reset form
       setName("")
       setDescription("")
@@ -135,6 +162,44 @@ export function CreateGroupDialog({ serverId, buttonSize = "default", onGroupCre
         title: "Success",
         description: "Group created successfully!",
       })
+      
+      // Create notification in database
+      try {
+        if (session?.user?.id) {
+          // Ensure socket is initialized with both userId and serverId
+          await initSocket(session.user.id, serverId);
+          
+          // Create notification via API
+          await fetch('/api/notifications', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              userId: session.user.id,
+              heading: "New Group Created 👥",
+              message: `You've successfully created "${name}" group.`,
+              link: `/server/${serverId}/group/${groupId}`
+            }),
+          });
+          
+          // Send real-time notification via Socket.io
+          const socket = getSocket();
+          socket.emit('new-notification', {
+            userId: session.user.id,
+            heading: "New Group Created 👥",
+            message: `You've successfully created "${name}" group.`,
+            read: false,
+            link: `/server/${serverId}/group/${groupId}`,
+            createdAt: new Date()
+          });
+          
+          // We don't disconnect here as the socket is managed by the useEffect cleanup
+        }
+      } catch (error) {
+        // Don't block the flow if notification fails
+        console.error("Failed to create notification:", error);
+      }
 
       // Call onGroupCreated callback if provided
       onGroupCreated?.()

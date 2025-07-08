@@ -100,7 +100,7 @@ export default function GroupPage() {
         if (!response.ok) throw new Error("Failed to fetch group data")
         
         const data = await response.json()
-        
+          
         setGroup(data)
         
         // If no channel is selected, select the first text channel

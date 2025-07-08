@@ -6,6 +6,9 @@ import { CheckCheck} from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { initSocket, disconnectSocket } from "@/lib/socket-client"
+import { useSession } from "next-auth/react"
+import { getSocket } from "@/lib/socket-client"
 
 interface Notification {
   id: string;
@@ -35,14 +38,18 @@ export default function NotificationSystem({className}:{className?:string}) {
   const [showFullModal, setShowFullModal] = useState(false)
   const [notificationData, setNotificationData] = useState<Notification[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const { data: session } = useSession()
+  const initialFetchDone = useRef(false)
   const notificationRef = useRef<HTMLDivElement>(null)
   const bellRef = useRef<HTMLDivElement>(null)
-
   const unreadCount = notificationData.filter((n) => !n.read).length
 
   const fetchNotifications = async () => {
     try {
-      setIsLoading(true)
+      console.log("Fetching Notifications")
+      if(!initialFetchDone.current){
+        setIsLoading(true)
+      }
       const res = await fetch('/api/notifications')
 
       if(!res.ok){
@@ -69,12 +76,41 @@ export default function NotificationSystem({className}:{className?:string}) {
     }
   }
 
-  // Fetch notifications when dropdown is opened
+  // Fetch notifications only once when component mounts
   useEffect(() => {
-    if (showNotifications) {
+      
       fetchNotifications()
-    }
-  }, [showNotifications])
+
+      const SocketConnecting = async () => {
+        try {
+          if(session?.user?.id){
+            initSocket(session.user.id);
+          }
+        } catch (error) {
+          console.error('Error connecting to socket:', error);  
+        }
+      }
+      
+      // Call the function to connect socket
+      SocketConnecting();
+      const socket = getSocket();
+
+      // Setup Socket Listeners Here
+      socket.on('new-notification', (notification) => {
+        setNotificationData(prev => [notification, ...prev]);
+      });
+
+      // Cleanup function - runs when component unmounts
+      return () => {
+        try {
+          // Remove the socket listener to prevent memory leaks
+          socket.off('new-notification');
+          console.log('Notification listener removed on component unmount');
+        } catch (error) {
+          console.error('Error removing socket listener:', error);
+        }
+      };
+  }, [session])
 
   // Close notifications when clicking outside
   useEffect(() => {
@@ -94,6 +130,23 @@ export default function NotificationSystem({className}:{className?:string}) {
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [])
+
+  // Add a new useEffect for page unload
+useEffect(() => {
+  // Handle page close/refresh
+  const handleBeforeUnload = () => {
+    // Use the already imported disconnectSocket function
+    disconnectSocket();
+  };
+
+  // Add event listener for page unload
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  
+  // Cleanup function
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+}, []);
 
   const handleMarkAllAsRead = async () => {
     try{
@@ -121,13 +174,24 @@ export default function NotificationSystem({className}:{className?:string}) {
   }
 
   const toggleNotifications = () => {
-    setShowNotifications((prev) => !prev)
-    setShowFullModal(false)
+    const newState = !showNotifications;
+    setShowNotifications(newState);
+    setShowFullModal(false);
+    
+    // Mark all notifications as read when opening the notification card
+    if (newState && notificationData.some(n => !n.read)) {
+      handleMarkAllAsRead(); // This updates both UI and database
+    }
   }
 
   const openFullModal = () => {
-    setShowFullModal(true)
-    setShowNotifications(false)
+    setShowFullModal(true);
+    setShowNotifications(false);
+    
+    // Mark all notifications as read when opening the full modal
+    if (notificationData.some(n => !n.read)) {
+      handleMarkAllAsRead(); // This updates both UI and database
+    }
   }
 
   return (
