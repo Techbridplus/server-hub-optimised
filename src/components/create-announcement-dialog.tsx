@@ -116,8 +116,6 @@ export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onA
       // Create notification in database
       try {
         if (session?.user?.id) {
-          // Ensure socket is initialized with both userId and serverId
-          await initSocket(session.user.id, serverId)
           
           // Fetch server members to notify them all
           const membersResponse = await fetch(`/api/servers/${serverId}/members`)
@@ -160,22 +158,22 @@ export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onA
           // Send real-time notification via Socket.io
           const socket = getSocket()
           
-          // Emit to server room for all members
-          socket.emit('server-announcement', {
-            serverId: serverId,
-            announcement: {
-              title: title,
-              createdBy: session.user.name
-            },
-            notification: {
-              heading: notificationHeading,
-              message: notificationMessage,
-              read: false,
-              link: notificationLink,
-              createdAt: new Date()
-            }
-          })
-          
+          if (socket) {
+            socket.emit('server-announcement', {
+              serverId: serverId,
+              notification: {
+                heading: notificationHeading,
+                message: notificationMessage,
+                read: false,
+                link: notificationLink,
+                createdAt: new Date()
+              },
+              members: members // Send the members array so server can notify each one
+            })
+          } else {
+            console.warn("Socket not initialized, real-time notification not sent.")
+          }
+
           // We don't disconnect here as the socket is managed by the useEffect cleanup
         }
       } catch (error) {

@@ -47,7 +47,7 @@ export function CreateGroupDialog({ serverId, buttonSize = "default", onGroupCre
     // Cleanup function for when component unmounts or page changes
     const handleBeforeUnload = () => {
       disconnectSocket();
-    };
+    }
     
     window.addEventListener('beforeunload', handleBeforeUnload);
     
