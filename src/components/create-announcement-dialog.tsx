@@ -154,20 +154,19 @@ export function CreateAnnouncementDialog({ serverId, buttonSize = "default", onA
             }
           }
           
-          // Send real-time notification via Socket.io
+          // Send real-time notification via Socket.io to creator only
           const socket = getSocket()
           
           if (socket) {
-            socket.emit('server-announcement', {
-              serverId: serverId,
+            socket.emit('notification', {
+              userId: session.user.id,
               notification: {
                 heading: notificationHeading,
-                message: notificationMessage,
+                message: `You have successfully created an announcement: "${title}"`,
                 read: false,
                 link: notificationLink,
                 createdAt: new Date()
-              },
-              members: members // Send the members array so server can notify each one
+              }
             })
           } else {
             console.warn("Socket not initialized, real-time notification not sent.")
